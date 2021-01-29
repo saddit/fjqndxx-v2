@@ -27,6 +27,7 @@ def set_key(apikey, secret_key):
 
 
 def _get_token() -> str:
+    global _API_KEY, _SECRET_KEY
     # client_id 为官网获取的AK， client_secret 为官网获取的SK
     host = 'https://aip.baidubce.com/oauth/2.0/token' \
            f'?grant_type=client_credentials&client_id={_API_KEY}&client_secret={_SECRET_KEY}'
