@@ -20,15 +20,15 @@ jobs:
     
     - name: Pip requirements
       run: |
-        pip3 install requests pycryptodome json
+        pip3 install requests pycryptodome
          
     - name: auto study
       run: |
         python3 workflow.py <<EOF
-        ${{secrets.username}}
-        ${{secrets.pwd}}
-        ${{secrets.pub_key}}
-        ${{secrets.ocr_api_key}}
-        ${{secrets.ocr_secret_key}}
+        ${{secrets.USERNAME}}
+        ${{secrets.PWD}}
+        ${{secrets.PUB_KEY}}
+        ${{secrets.OCR_API_KEY}}
+        ${{secrets.OCR_SECRET_KEY}}
         EOF
         
