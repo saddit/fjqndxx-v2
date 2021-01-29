@@ -107,9 +107,9 @@ def run(use_config: bool):
 
 def start_with_workflow():
     init_logger()
-    run(True)
+    run(False)
 
 
 if __name__ == '__main__':
     init_logger()
-    run(False)
+    run(True)
