@@ -20,7 +20,7 @@ jobs:
     
     - name: Pip requirements
       run: |
-        pip3 install -r requirements.txt
+        pip3 install requests pycryptodome json
          
     - name: auto study
       run: |
