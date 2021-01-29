@@ -19,7 +19,6 @@ from Crypto.PublicKey import RSA
         并在run.yml中按此顺序定义输入流, 按顺序！
 """
 
-
 def init_logger():
     logging.getLogger().setLevel(logging.INFO)
     logging.basicConfig(format="[%(levelname)s]:%(message)s")

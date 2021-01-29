@@ -9,6 +9,8 @@ ocr使用百度的接口，如果需要更换请保持general_ocr函数名、参
 """
 
 # 加载 api key 和 secret key
+_API_KEY = ""
+_SECRET_KEY = ""
 try:
     with open('config123.json', 'r') as config:
         jsons = json.loads(config.read())
