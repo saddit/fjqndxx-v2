@@ -28,7 +28,7 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKf9iZkA5HEFw4zt7MRBkcmgUiz5+r5eqDOKbaurEbScmXd3
 
 - 添加五个secrets，分别为：username,  pwd,  pub_key,  ocr_api_key,  ocr_secret_key
 
-- 修改.github/workflows/run.yml中的cron为你想要触发的时间，默认是每周三中午12点，cron如何写请自行百度
+- 修改.github/workflows/run.yml中的cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
 - 进入Action中手动触发一次，测试是否成功
 
 
