@@ -9,9 +9,7 @@
 #### 🍎pub_key:
 
 -----BEGIN PUBLIC KEY-----
-
 MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKf9iZkA5HEFw4zt7MRBkcmgUiz5+r5eqDOKbaurEbScmXd3ZZTtyzirqkYKRIH5mQ+8hq+Wd/pTZNXHS8L0+88CAwEAAQ==
-
 -----END PUBLIC KEY-----
 
 #### 0. 申请Ocr识别接口的权限
