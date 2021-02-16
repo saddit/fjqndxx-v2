@@ -14,6 +14,8 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKf9iZkA5HEFw4zt7MRBkcmgUiz5+r5eqDOKbaurEbScmXd3
 
 #### 0. 申请Ocr识别接口的权限
 
+[详细教程请点击这里](https://blog.pressed.top/signUpBaiduOcr)
+
 *请选择使用一种可以识别文字的api，建议使用BaiduAI的Ocr接口，否则需要自行修改代码*
 
 - 首先要有一个百度账号，进入[这个网址](https://ai.baidu.com/)，点击控制台并登录
