@@ -1,5 +1,5 @@
 Crypto==1.4.1
-demjson==2.2.4
+json==2.2.4
 pycryptodome==3.9.9
 requests==2.25.1
 
