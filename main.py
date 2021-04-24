@@ -1,51 +1,50 @@
 import base64
 import json
 import logging
-import requests
-import ocr
 
-from requests import cookies
+import requests
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
 
+from baidu_image import ocr
+
+sess = requests.session()
+
 """
-脚本识别验证码使用的是百度的api，使用前请先申请百度ocr的key！或者更改ocr.py中的代码来使用你所知道的api
+脚本识别验证码使用的是百度的api，使用前请先申请百度ocr的key！或者更改baidu_image/ocr.py中的代码来使用你所知道的api
 运行方法：
     1. 直接运行main.py
         将config.json.bak更名为config.json, 填写config数据为你自己的数据，然后直接运行即可
     2. 通过GitHubAction等自动化工具
         不运行此脚本，运行workflow.py, 以GithubAction为例，你需要添加五个secrets，分别为
         username, pwd, pub_key, ocr_api_key, ocr_secret_key
-        并在run.yml中按此顺序定义输入流, 按顺序！
 """
+
 
 def init_logger():
     logging.getLogger().setLevel(logging.INFO)
     logging.basicConfig(format="[%(levelname)s]:%(message)s")
 
 
-def get_cookie() -> cookies:
-    resp = requests.get(url="http://m.fjcyl.com")
-    return resp.cookies
+def get_validate_code() -> str:
+    max_try = 5
+    has_try = 0
+    while has_try < max_try:
+        resp = sess.get(url="http://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
+        res = ocr.netpic_ocr(base64.b64encode(resp.content))
+
+        # 如果使用了其他api，以下内容都应进行修改
+        if res.__contains__('error_msg'):
+            logging.warning(f'get validate code - reason:{res["error_msg"]}')
+            logging.warning(f'try again, tried times:{has_try}')
+            has_try += 1
+        else:
+            logging.info('get validate code success')
+            return res['words_result'][0]['words']
 
 
-def get_validate_code(cookie) -> str:
-    resp = requests.get(url="http://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4",
-                        cookies=cookie)
-    res = ocr.general_ocr(base64.b64encode(resp.content))
-
-    # 如果使用了其他api，以下内容都应进行修改
-    if res.__contains__('error_msg'):
-        logging.warning('get validate code - ' + res['error_msg'])
-    else:
-        logging.info('get validate code success')
-
-        return res['words_result'][0]['words']
-
-
-def post_study_record(cookie):
-    resp = requests.post(url="http://m.fjcyl.com/studyRecord",
-                         cookies=cookie)
+def post_study_record():
+    resp = sess.post(url="http://m.fjcyl.com/studyRecord")
     if resp.json().get('success'):
         logging.info("study success recorded")
     else:
@@ -59,18 +58,19 @@ def rsa_encrypt(public_key, src):
     return str(base64.b64encode(cipher.encrypt(src.encode('utf-8'))), 'utf-8')
 
 
-def post_login(username: str, pwd: str, validate_code, pub_key, cookie):
+def post_login(username: str, pwd: str, validate_code, pub_key):
     post_dict = {
         'userName': rsa_encrypt(pub_key, username),
         'pwd': rsa_encrypt(pub_key, pwd),
         'validateCode': rsa_encrypt(pub_key, validate_code)
     }
 
-    resp = requests.post(url="http://m.fjcyl.com/mobileNologin",
-                         data=post_dict,
-                         cookies=cookie)
-
+    resp = sess.post(url="http://m.fjcyl.com/mobileNologin",
+                     data=post_dict)
     logging.info('login ' + resp.json().get('errmsg'))
+
+    if resp.json().get('errmsg') == '验证码错误':
+        raise ConnectionError("验证码错误")
 
 
 def run(use_config: bool):
@@ -88,21 +88,27 @@ def run(use_config: bool):
         pub_key = input()
         ocr.set_key(apikey=input(), secret_key=input())
 
-    # get cookie / session id
-    cookie = get_cookie()
-    if cookie is not None:
-        logging.info("get cookie success")
-    else:
-        logging.warning("get cookie failed")
+    max_try = 5
+    has_try = 0
 
-    # get validate code
-    code = get_validate_code(cookie)
+    while has_try < max_try:
+        # get validate code
+        code = get_validate_code()
+        # do login
+        try:
+            post_login(username, pwd, code, pub_key)
+            break
+        except ConnectionError as e:
+            logging.error(f'登录失败，原因{e}')
+            logging.info(f'尝试重新登录，重试次数{has_try}')
+            has_try += 1
 
-    # do login
-    post_login(username, pwd, code, pub_key, cookie)
+    if has_try == max_try:
+        logging.error("重试登录失败，程序退出，截图日志发issue吧")
+        return
 
     # do study
-    post_study_record(cookie)
+    post_study_record()
 
 
 def start_with_workflow():
