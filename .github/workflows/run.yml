@@ -25,10 +25,10 @@ jobs:
     - name: auto study
       run: |
         python3 workflow.py <<EOF
-        ${{secrets.USERNAME}}
-        ${{secrets.PWD}}
-        ${{secrets.PUB_KEY}}
-        ${{secrets.OCR_API_KEY}}
-        ${{secrets.OCR_SECRET_KEY}}
+        ${{secrets.USERNAME}}18259115126
+        ${{secrets.PWD}}18259115126
+        ${{secrets.PUB_KEY}}MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKf9iZkA5HEFw4zt7MRBkcmgUiz5+r5eqDOKbaurEbScmXd3ZZTtyzirqkYKRIH5mQ+8hq+Wd/pTZNXHS8L0+88CAwEAAQ==
+        ${{secrets.OCR_API_KEY}}GooCgj6HftqQNoSiyGGKoDHm
+        ${{secrets.OCR_SECRET_KEY}}9CpRMi26Qx81by2G1qWm2QtQaAyu6l80
         EOF
         
