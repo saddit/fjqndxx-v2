@@ -96,9 +96,8 @@ def run(use_config: bool):
             jsons = json.loads(config.read())
             username = jsons.get('username')
             pwd = jsons.get('pwd')
-            pub_key = jsons.get('rsaKey').get('public')
-            if not jsons.get('ocr').get('sk'):
-                use_tesseract = True
+            pub_key = jsons.get('rsaKey').get('public') 
+            use_tesseract = jsons.get('getCodeByTesseract')
     else:
         username = input()
         pwd = input()
@@ -136,10 +135,15 @@ def run(use_config: bool):
 def start_with_workflow():
     init_logger()
     run(False)
-
-
-if __name__ == '__main__':
+    
+def start_with_local_scheduler:
     init_logger()
     scheduler = BlockingScheduler()
     scheduler.add_job(run, 'cron', day_of_week='0', args=(True,), hour=10, minute=0)
     scheduler.start()
+
+
+if __name__ == '__main__':
+    init_logger()
+    run(True)
+    
