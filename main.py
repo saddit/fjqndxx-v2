@@ -1,7 +1,6 @@
 import base64
-import json
 import logging
-
+import json
 import requests
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
@@ -30,7 +29,7 @@ def get_validate_code() -> str:
     max_try = 5
     has_try = 0
     while has_try < max_try:
-        resp = sess.get(url="http://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
+        resp = sess.get(url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
         res = ocr.netpic_ocr(base64.b64encode(resp.content))
 
         # 如果使用了其他api，以下内容都应进行修改
@@ -44,7 +43,7 @@ def get_validate_code() -> str:
 
 
 def post_study_record():
-    resp = sess.post(url="http://m.fjcyl.com/studyRecord")
+    resp = sess.post(url="https://m.fjcyl.com/studyRecord")
     if resp.json().get('success'):
         logging.info("study success recorded")
     else:
@@ -65,9 +64,14 @@ def post_login(username: str, pwd: str, validate_code, pub_key):
         'validateCode': rsa_encrypt(pub_key, validate_code)
     }
 
-    resp = sess.post(url="http://m.fjcyl.com/mobileNologin",
+    resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
                      data=post_dict)
-    logging.info('login ' + resp.json().get('errmsg'))
+
+    if resp.status_code == requests.codes.ok:
+        logging.info('login ' + resp.json().get('errmsg'))
+    else:
+        logging.error(f'官方服务器发生异常,错误代码:{resp.status_code},信息:{resp.text}')
+        raise RuntimeError('server error')
 
     if resp.json().get('errmsg') == '验证码错误':
         raise ConnectionError("验证码错误")
