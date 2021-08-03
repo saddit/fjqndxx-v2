@@ -6,6 +6,7 @@ from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
 
 from baidu_image import ocr
+from baidu_image import get_code_by_tesseract
 
 sess = requests.session()
 
@@ -42,6 +43,13 @@ def get_validate_code() -> str:
             return res['words_result'][0]['words']
 
 
+def get_validate_code2() -> str:
+    resp = sess.get(url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
+    with open('code.jpg', 'wb') as f:
+        f.write(resp.content)
+    return get_code_by_tesseract.get_code('code.jpg')
+
+
 def post_study_record():
     resp = sess.post(url="https://m.fjcyl.com/studyRecord")
     if resp.json().get('success'):
@@ -73,19 +81,22 @@ def post_login(username: str, pwd: str, validate_code, pub_key):
         logging.error(f'官方服务器发生异常,错误代码:{resp.status_code},信息:{resp.text}')
         raise RuntimeError('server error')
 
-    if resp.json().get('errmsg') == '验证码错误':
+    if '验证码错误' in resp.json().get('errmsg'):
         raise ConnectionError("验证码错误")
 
 
 def run(use_config: bool):
     logging.info("auto-study is Running")
     # get default config
+    use_tesseract = False
     if use_config:
         with open('config.json', 'r') as config:
             jsons = json.loads(config.read())
             username = jsons.get('username')
             pwd = jsons.get('pwd')
             pub_key = jsons.get('rsaKey').get('public')
+            if not jsons.get('ocr').get('sk'):
+                use_tesseract = True
     else:
         username = input()
         pwd = input()
@@ -95,9 +106,14 @@ def run(use_config: bool):
     max_try = 5
     has_try = 0
 
+    get_code = get_validate_code
+
+    if use_tesseract:
+        get_code = get_validate_code2
+
     while has_try < max_try:
         # get validate code
-        code = get_validate_code()
+        code = get_code()
         # do login
         try:
             post_login(username, pwd, code, pub_key)
