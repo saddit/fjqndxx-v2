@@ -19,16 +19,16 @@ jobs:
         sudo apt install python3
     
     - name: Pip requirements
-      run: |
+      run:
         pip3 install requests pycryptodome
          
     - name: auto study
-      run: |
-        python3 workflow.py <<EOF
-        ${{secrets.USERNAME}}
-        ${{secrets.PWD}}
-        ${{secrets.PUB_KEY}}
-        ${{secrets.OCR_API_KEY}}
-        ${{secrets.OCR_SECRET_KEY}}
-        EOF
+      env:
+        username: ${{secrets.USERNAME}}
+        password: ${{secrets.PWD}}
+        pubKey: ${{secrets.PUB_KEY}}
+        ocrSecret: ${{secrets.OCR_API_KEY}}
+        ocrKey: ${{secrets.OCR_SECRET_KEY}}
+      run:
+        python3 workflow.py
         

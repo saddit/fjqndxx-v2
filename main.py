@@ -1,6 +1,8 @@
 import base64
 import logging
 import json
+import os
+
 import requests
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
@@ -87,10 +89,10 @@ def run(use_config: bool):
             pwd = jsons.get('pwd')
             pub_key = jsons.get('rsaKey').get('public')
     else:
-        username = input()
-        pwd = input()
-        pub_key = input()
-        ocr.set_key(apikey=input(), secret_key=input())
+        username = os.environ['username']
+        pwd = os.environ['password']
+        pub_key = os.environ['pubKey']
+        ocr.set_key(apikey=os.environ['ocrKey'], secret_key=os.environ['ocrSecret'])
 
     max_try = 5
     has_try = 0
