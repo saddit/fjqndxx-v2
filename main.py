@@ -2,8 +2,10 @@ import base64
 import logging
 import json
 import requests
+
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 from baidu_image import ocr
 from baidu_image import get_code_by_tesseract
@@ -138,4 +140,6 @@ def start_with_workflow():
 
 if __name__ == '__main__':
     init_logger()
-    run(True)
+    scheduler = BlockingScheduler()
+    scheduler.add_job(run, 'cron', day_of_week='0', args=(True,), hour=10, minute=0)
+    scheduler.start()
