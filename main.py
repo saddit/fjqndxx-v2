@@ -99,12 +99,7 @@ def get_profile_from_env():
     return username, pwd, pub_key, api_key, secret_key
 
 
-def run(use_config: bool):
-    logging.info("auto-study is Running")
-    # get default config
-    username, pwd, pub_key, api_key, secret_key = get_profile_from_config() if use_config else get_profile_from_env()
-    ocr.set_key(apikey=api_key, secret_key=secret_key)
-
+def login(username, pwd, pub_key):
     max_try = 5
     has_try = 0
 
@@ -121,9 +116,16 @@ def run(use_config: bool):
             has_try += 1
 
     if has_try == max_try:
-        logging.error("重试登录失败，程序退出，截图日志发issue吧")
-        return
+        raise RuntimeError("重试登录失败，程序退出，截图日志发issue吧")
 
+
+def run(use_config: bool):
+    logging.info("auto-study is Running")
+    # get default config
+    username, pwd, pub_key, api_key, secret_key = get_profile_from_config() if use_config else get_profile_from_env()
+    ocr.set_key(apikey=api_key, secret_key=secret_key)
+    # do login
+    login(username, pwd, pub_key)
     # do study
     post_study_record()
 
