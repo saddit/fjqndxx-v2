@@ -1,19 +1,11 @@
 # encoding:utf-8
-import json
 import logging
 import requests
 from . import tokens
 
-# 加载 api key 和 secret key
+# 全局保存 api key 和 secret key
 _API_KEY = ''
 _SECRET_KEY = ''
-try:
-    with open('config.json', 'r') as config:
-        jsons = json.loads(config.read())
-        _API_KEY = jsons.get('ocr').get('ak')
-        _SECRET_KEY = jsons.get('ocr').get('sk')
-except FileNotFoundError as e:
-    logging.warning(f'{e.filename}:读取config配置文件出错，请确保ocr所需key已经正确输入, 错误信息{e}')
 
 
 def set_key(apikey, secret_key):

@@ -79,20 +79,31 @@ def post_login(username: str, pwd: str, validate_code, pub_key):
         raise ConnectionError("验证码错误")
 
 
+def get_profile_from_config():
+    with open('config.json', 'r', encoding='utf-8') as config:
+        configJson = json.loads(config.read())
+        username = configJson.get('username')
+        pwd = configJson.get('pwd')
+        pub_key = configJson.get('rsaKey').get('public')
+        api_key = configJson.get('ocr').get('ak')
+        secret_key = configJson.get('ocr').get('sk')
+    return username, pwd, pub_key, api_key, secret_key
+
+
+def get_profile_from_env():
+    username = os.environ['username']
+    pwd = os.environ['password']
+    pub_key = os.environ['pubKey']
+    api_key = os.environ['ocrKey']
+    secret_key = os.environ['ocrSecret']
+    return username, pwd, pub_key, api_key, secret_key
+
+
 def run(use_config: bool):
     logging.info("auto-study is Running")
     # get default config
-    if use_config:
-        with open('config.json', 'r') as config:
-            jsons = json.loads(config.read())
-            username = jsons.get('username')
-            pwd = jsons.get('pwd')
-            pub_key = jsons.get('rsaKey').get('public')
-    else:
-        username = os.environ['username']
-        pwd = os.environ['password']
-        pub_key = os.environ['pubKey']
-        ocr.set_key(apikey=os.environ['ocrKey'], secret_key=os.environ['ocrSecret'])
+    username, pwd, pub_key, api_key, secret_key = get_profile_from_config() if use_config else get_profile_from_env()
+    ocr.set_key(apikey=api_key, secret_key=secret_key)
 
     max_try = 5
     has_try = 0
