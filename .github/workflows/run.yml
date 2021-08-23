@@ -29,6 +29,7 @@ jobs:
         pubKey: ${{secrets.PUB_KEY}}
         ocrSecret: ${{secrets.OCR_SECRET_KEY}}
         ocrKey: ${{secrets.OCR_API_KEY}}
+        ocrType: ${{secrets.OCR_TYPE}}
       run:
         python3 workflow.py
         

@@ -2,14 +2,14 @@ import base64
 import logging
 import json
 import os
+import importlib
 
 import requests
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
 
-from baidu_image import ocr
-
 sess = requests.session()
+ocr_util = None
 
 """
 脚本识别验证码使用的是百度的api，使用前请先申请百度ocr的key！或者更改baidu_image/ocr.py中的代码来使用你所知道的api
@@ -27,29 +27,36 @@ def init_logger():
     logging.basicConfig(format="[%(levelname)s]:%(message)s")
 
 
+def error_exit(msg: str):
+    logging.error(msg)
+    exit(-1)
+
+
 def get_validate_code() -> str:
     max_try = 5
     has_try = 0
     while has_try < max_try:
         resp = sess.get(url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
-        res = ocr.netpic_ocr(base64.b64encode(resp.content))
-
-        # 如果使用了其他api，以下内容都应进行修改
-        if res.__contains__('error_msg'):
-            logging.warning(f'get validate code - reason:{res["error_msg"]}')
-            logging.warning(f'try again, tried times:{has_try}')
+        try:
+            # noinspection PyUnresolvedReferences
+            res = ocr_util.get_result(base64.b64encode(resp.content))
+            logging.info('获取验证码成功')
+            return res
+        except Exception as e:
+            logging.warning(f'获取验证码失败，原因:{e}')
+            logging.warning(f'正在重试, 次数:{has_try}')
             has_try += 1
-        else:
-            logging.info('get validate code success')
-            return res['words_result'][0]['words']
+
+    if has_try == max_try:
+        error_exit("验证码解析失败,请尝试更换方式或发issue寻求帮助")
 
 
 def post_study_record():
     resp = sess.post(url="https://m.fjcyl.com/studyRecord")
     if resp.json().get('success'):
-        logging.info("study success recorded")
+        logging.info("学习成功！")
     else:
-        logging.warning("study record failed")
+        logging.warning("学习失败")
 
 
 def rsa_encrypt(public_key, src):
@@ -72,8 +79,7 @@ def post_login(username: str, pwd: str, validate_code, pub_key):
     if resp.status_code == requests.codes.ok:
         logging.info('login ' + resp.json().get('errmsg'))
     else:
-        logging.error(f'官方服务器发生异常,错误代码:{resp.status_code},信息:{resp.text}')
-        raise RuntimeError('server error')
+        error_exit(f'官方服务器发生异常,错误代码:{resp.status_code},信息:{resp.text}')
 
     if resp.json().get('errmsg') == '验证码错误':
         raise ConnectionError("验证码错误")
@@ -87,7 +93,8 @@ def get_profile_from_config():
         pub_key = configJson.get('rsaKey').get('public')
         api_key = configJson.get('ocr').get('ak')
         secret_key = configJson.get('ocr').get('sk')
-    return username, pwd, pub_key, api_key, secret_key
+        ocr_type = configJson.get('ocr').get('type')
+    return username, pwd, pub_key, api_key, secret_key, ocr_type
 
 
 def get_profile_from_env():
@@ -96,7 +103,8 @@ def get_profile_from_env():
     pub_key = os.environ['pubKey']
     api_key = os.environ['ocrKey']
     secret_key = os.environ['ocrSecret']
-    return username, pwd, pub_key, api_key, secret_key
+    ocr_type = os.environ['ocrType']
+    return username, pwd, pub_key, api_key, secret_key, ocr_type
 
 
 def login(username, pwd, pub_key):
@@ -116,14 +124,28 @@ def login(username, pwd, pub_key):
             has_try += 1
 
     if has_try == max_try:
-        raise RuntimeError("重试登录失败，程序退出，截图日志发issue吧")
+        error_exit("重试登录失败，程序退出，截图日志发issue吧")
+
+
+def init_ocr(ocr_type: str, ak: str, sk: str):
+    global ocr_util
+    if ocr_type is None:
+        ocr_type = "baidu_image"
+    try:
+        ocr_util = importlib.import_module(f"ocr_module.{ocr_type}.{ocr_type}_ocr")
+    except ModuleNotFoundError:
+        error_exit("ocr类型不存在,请更换类型")
+    if ocr_util.is_need_keys():
+        ocr_util.set_keys(ak, sk)
+    logging.info(f"使用 OCR {ocr_type}")
 
 
 def run(use_config: bool):
-    logging.info("auto-study is Running")
+    logging.info("自动学习开始")
     # get default config
-    username, pwd, pub_key, api_key, secret_key = get_profile_from_config() if use_config else get_profile_from_env()
-    ocr.set_key(apikey=api_key, secret_key=secret_key)
+    username, pwd, pub_key, api_key, secret_key, ocr_type = get_profile_from_config() if use_config else get_profile_from_env()
+    # init ocr module
+    init_ocr(ocr_type, api_key, secret_key)
     # do login
     login(username, pwd, pub_key)
     # do study

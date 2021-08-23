@@ -12,6 +12,8 @@
 
 **浙江团员可以点击这里[青春浙江](https://gist.github.com/838239178/ddad90e8c5e52f5fa8f0febea6109f24)**
 
+*如果你有新的或更好OCR识别方式 请参考 [OCR贡献文档](./doc/OCR_Module_Rule.md) 做出你的贡献！*
+
 ## 使用方法
 
 #### 🍎pub_key:
@@ -41,7 +43,8 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKf9iZkA5HEFw4zt7MRBkcmgUiz5+r5eqDOKbaurEbScmXd3
 - 修改.github/workflows/run.yml中的cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
 - 进入Action中手动触发一次，测试是否成功
 
+## 可选识别类型
 
-
+- baidu_image [需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/)
 
 
