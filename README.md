@@ -45,6 +45,6 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKf9iZkA5HEFw4zt7MRBkcmgUiz5+r5eqDOKbaurEbScmXd3
 
 ## 可选识别类型
 
-- baidu_image [需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/)
+- baidu_image [默认方法,需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/)
 
 
