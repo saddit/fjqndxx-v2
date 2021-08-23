@@ -4,7 +4,7 @@
 
 ## 创建脚本文件
 
-fork本项目并克隆到本地, 在*ocr_module*文件夹中新建目录 `{名称}/{名称}_ocr.py` , 如 `baidu_image/baidu_image_ocr.py`
+fork本项目develop分支并克隆到本地, 在*ocr_module*文件夹中新建目录 `{名称}/{名称}_ocr.py` , 如 `baidu_image/baidu_image_ocr.py`
 
 ## 编写脚本文件
 
