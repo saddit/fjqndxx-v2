@@ -132,6 +132,7 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
     if ocr_type is None:
         ocr_type = "baidu_image"
     try:
+        print(f"[debug] ocr_type is {ocr_type}")
         ocr_util = importlib.import_module(f"ocr_module.{ocr_type}.{ocr_type}_ocr")
     except ModuleNotFoundError:
         error_exit("ocr类型不存在,请更换类型")

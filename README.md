@@ -45,6 +45,10 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKf9iZkA5HEFw4zt7MRBkcmgUiz5+r5eqDOKbaurEbScmXd3
 
 ## 可选识别类型
 
+GithubAction（可选）添加新的secrets OCR_TYPE 来指定识别类型
+
+其他方式在config.json中修改指定配置项即可
+
 - baidu_image [默认方法,需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/)
 
 
