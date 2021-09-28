@@ -3,13 +3,14 @@ import logging
 import json
 import os
 import importlib
-
 import requests
-from Crypto.Cipher import PKCS1_v1_5
-from Crypto.PublicKey import RSA
+
+crypt_name = "sm4"
+crypt_mode = "ecb"
 
 sess = requests.session()
 ocr_util = None
+encryptor = importlib.import_module(f"crypt_module.{crypt_name}.{crypt_name}_{crypt_mode}")
 
 """
 脚本识别验证码使用的是百度的api，使用前请先申请百度ocr的key！或者更改baidu_image/ocr.py中的代码来使用你所知道的api
@@ -59,30 +60,23 @@ def post_study_record():
         logging.warning("学习失败")
 
 
-def rsa_encrypt(public_key, src):
-    public_key = '-----BEGIN PUBLIC KEY-----\n' + public_key + '\n-----END PUBLIC KEY-----'
-    rsa_key = RSA.importKey(public_key)
-    cipher = PKCS1_v1_5.new(rsa_key)
-    return str(base64.b64encode(cipher.encrypt(src.encode('utf-8'))), 'utf-8')
-
-
 def post_login(username: str, pwd: str, validate_code, pub_key):
     post_dict = {
-        'userName': rsa_encrypt(pub_key, username),
-        'pwd': rsa_encrypt(pub_key, pwd),
-        'validateCode': rsa_encrypt(pub_key, validate_code)
+        'userName': encryptor.encrypt(username, pub_key),
+        'pwd': encryptor.encrypt(pwd, pub_key),
+        'validateCode': encryptor.encrypt(validate_code, pub_key)
     }
 
     resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
                      data=post_dict)
 
     if resp.status_code == requests.codes.ok:
-        logging.info('login ' + resp.json().get('errmsg'))
+        if resp.json().get('success'):
+            logging.info('login ' + resp.json().get('errmsg'))
+        else:
+            raise ConnectionError(resp.json().get('errmsg'))
     else:
         error_exit(f'官方服务器发生异常,错误代码:{resp.status_code},信息:{resp.text}')
-
-    if resp.json().get('errmsg') == '验证码错误':
-        raise ConnectionError("验证码错误")
 
 
 def get_profile_from_config():
@@ -119,7 +113,7 @@ def login(username, pwd, pub_key):
             post_login(username, pwd, code, pub_key)
             break
         except ConnectionError as e:
-            logging.error(f'登录失败，原因{e}')
+            logging.error(f'登录失败，原因:{e}')
             logging.info(f'尝试重新登录，重试次数{has_try}')
             has_try += 1
 

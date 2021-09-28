@@ -20,7 +20,7 @@ jobs:
     
     - name: Pip requirements
       run:
-        pip3 install requests pycryptodome
+        pip3 install requests pycryptodome gmssl
          
     - name: auto study
       env:
