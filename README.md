@@ -3,6 +3,8 @@
 > 2021.04.24：添加失败重试功能，使用针对性更强的OCR识别接口  
 > 
 > 2021.07.09：官方服务器服务采用了https协议 导致发生bug 已修复
+> 
+> 2021.09.28：修复登录异常问题 更换了 **密钥(pubKey)** 和加密方法 请务必fork此最新版本并更换配置文件的public或github_secret的pub_key！
 
 🤺妈妈再也不用担心我团课没看被团支书赶着催了
 
@@ -19,7 +21,7 @@
 #### 🍎pub_key:
 
 ```
-MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKf9iZkA5HEFw4zt7MRBkcmgUiz5+r5eqDOKbaurEbScmXd3ZZTtyzirqkYKRIH5mQ+8hq+Wd/pTZNXHS8L0+88CAwEAAQ==
+A7E74D2B6282AEB1C5EA3C28D25660A7
 ```
 
 #### 0. 申请Ocr识别接口的权限
