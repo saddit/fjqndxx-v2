@@ -5,7 +5,7 @@ on:
   push:
     branches: [ develop ]
   pull_request:
-    branches: [ master ]
+    branches: [ develop, master ]
 #  schedule:
 #    - cron: 0 6 * * 3
 
