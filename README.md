@@ -1,5 +1,7 @@
 # 青年大学习/团课自动打卡
 
+![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.7+-green.svg) ![](https://img.shields.io/badge/License-Apache2.0-green.svg)
+
 > 2021.04.24：添加失败重试功能，使用针对性更强的OCR识别接口  
 > 
 > 2021.07.09：官方服务器服务采用了https协议 导致发生bug 已修复
@@ -52,5 +54,4 @@ GithubAction（可选）添加新的secrets OCR_TYPE 来指定识别类型
 其他方式在config.json中修改指定配置项即可
 
 - baidu_image [默认方法,需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/)
-
 
