@@ -44,7 +44,7 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 
 - 添加五个secrets，分别为：username,  pwd,  pub_key,  ocr_api_key,  ocr_secret_key
 
-- 将.github/workflows/run.yml中的注释部分(`#`号)取消并cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
+- **将.github/workflows/run.yml中的注释部分(`#`号)取消**并cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
 - 进入Action中手动触发一次，测试是否成功
 
 ## 可选识别类型
