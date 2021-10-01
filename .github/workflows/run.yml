@@ -2,9 +2,12 @@ name: auto-study
 
 on:
   workflow_dispatch:
-  
-  schedule:
-    - cron: 0 6 * * 3
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ master ]
+#  schedule:
+#    - cron: 0 6 * * 3
 
 jobs:
   build:
