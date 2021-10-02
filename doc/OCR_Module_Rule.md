@@ -42,3 +42,6 @@ def get_result(img: bytes) -> str
 教程除了第三方的网站外，也可自行编写`{名称}.md`文件到 `doc/ocr_help` 下，并按照相对地址填入，如 `./doc/ocr_help/baidu_image.md`
 
 ### 最后——申请 Pull Request
+
+需要附上执行成功截图
+

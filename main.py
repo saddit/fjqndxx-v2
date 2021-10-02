@@ -3,6 +3,8 @@ import logging
 import json
 import os
 import importlib
+from functools import wraps
+
 import requests
 
 crypt_name = "sm4"
@@ -11,6 +13,10 @@ crypt_mode = "ecb"
 sess = requests.session()
 ocr_util = None
 encryptor = importlib.import_module(f"crypt_module.{crypt_name}.{crypt_name}_{crypt_mode}")
+send_util = {
+    'enable': False,
+    'mode': 'fail',
+}
 
 """
 脚本识别验证码使用的是百度的api，使用前请先申请百度ocr的key！或者更改baidu_image/ocr.py中的代码来使用你所知道的api
@@ -23,6 +29,16 @@ encryptor = importlib.import_module(f"crypt_module.{crypt_name}.{crypt_name}_{cr
 """
 
 
+def catch_exception(func):
+    @wraps(func)
+    def catch(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            error_exit(f"发生未知异常(请截图日志发issue)：{e}")
+    return catch
+
+
 def init_logger():
     logging.getLogger().setLevel(logging.INFO)
     logging.basicConfig(format="[%(levelname)s]:%(message)s")
@@ -30,6 +46,7 @@ def init_logger():
 
 def error_exit(msg: str):
     logging.error(msg)
+    send_msg(content=msg, success=False)
     exit(-1)
 
 
@@ -57,7 +74,7 @@ def post_study_record():
     if resp.json().get('success'):
         logging.info("学习成功！")
     else:
-        logging.warning("学习失败")
+        error_exit("学习失败")
 
 
 def post_login(username: str, pwd: str, validate_code, pub_key):
@@ -81,14 +98,19 @@ def post_login(username: str, pwd: str, validate_code, pub_key):
 
 def get_profile_from_config():
     with open('config.json', 'r', encoding='utf-8') as config:
-        configJson = json.loads(config.read())
-        username = configJson.get('username')
-        pwd = configJson.get('pwd')
-        pub_key = configJson.get('rsaKey').get('public')
-        api_key = configJson.get('ocr').get('ak')
-        secret_key = configJson.get('ocr').get('sk')
-        ocr_type = configJson.get('ocr').get('type')
-    return username, pwd, pub_key, api_key, secret_key, ocr_type
+        config_json = json.loads(config.read())
+        username = config_json.get('username')
+        pwd = config_json.get('pwd')
+        pub_key = config_json.get('rsaKey').get('public')
+        api_key = config_json.get('ocr').get('ak')
+        secret_key = config_json.get('ocr').get('sk')
+        ocr_type = config_json.get('ocr').get('type')
+        send_type = config_json.get('send').get('type')
+        send_key = config_json.get('send').get('key')
+        send_mode = config_json.get('send').get('mode')
+    return username, pwd, pub_key, \
+           api_key, secret_key, ocr_type, \
+           send_type, send_key, send_mode
 
 
 def get_profile_from_env():
@@ -98,7 +120,12 @@ def get_profile_from_env():
     api_key = os.environ['ocrKey']
     secret_key = os.environ['ocrSecret']
     ocr_type = os.environ['ocrType']
-    return username, pwd, pub_key, api_key, secret_key, ocr_type
+    send_type = os.environ['sendType']
+    send_key = os.environ['sendKey']
+    send_mode = os.environ['sendMode']
+    return username, pwd, pub_key, \
+           api_key, secret_key, ocr_type, \
+           send_type, send_key, send_mode
 
 
 def login(username, pwd, pub_key):
@@ -126,7 +153,6 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
     if ocr_type is None or ocr_type == '':
         ocr_type = "baidu_image"
     try:
-        logging.info(f"应用OCR:{ocr_type}")
         ocr_util = importlib.import_module(f"ocr_module.{ocr_type}.{ocr_type}_ocr")
     except ModuleNotFoundError:
         error_exit("ocr类型不存在,请更换类型")
@@ -135,16 +161,51 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
     logging.info(f"使用 OCR {ocr_type}")
 
 
+def init_sender(send_type, send_key, send_mode):
+    if send_type is None or send_type == '':
+        return
+    if send_key is None or send_key == '':
+        error_exit('缺少配置信息: send_key')
+    else:
+        send_util['enable'] = True
+        send_util['sender'] = importlib.import_module(f"send_module.{send_type}.sender")
+        send_util['sender'].set_key(send_key)
+        if send_mode is not None and send_mode != "":
+            send_util['mode'] = send_mode
+
+
+def send_msg(content, success=True):
+    if not send_util['enable']:
+        return
+    if send_util['mode'] == 'both' \
+            or (send_util['mode'] == 'fail' and not success) \
+            or (send_util['mode'] == 'success' and success):
+        res = send_util['sender'].send(title="青年大学习打卡",
+                                       content=f"**状态：** {'成功' if success else '失败'}\n\n"
+                                               f"**信息：** {content}")
+        if not res['success']:
+            logging.warning(f"消息推送失败，原因：{res['message']}")
+        else:
+            logging.info(f"消息推送成功")
+
+
+@catch_exception
 def run(use_config: bool):
     logging.info("自动学习开始")
     # get default config
-    username, pwd, pub_key, api_key, secret_key, ocr_type = get_profile_from_config() if use_config else get_profile_from_env()
+    username, pwd, pub_key, \
+    api_key, secret_key, ocr_type, \
+    send_type, send_key, send_mode = get_profile_from_config() if use_config else get_profile_from_env()
     # init ocr module
     init_ocr(ocr_type, api_key, secret_key)
+    # init sender
+    init_sender(send_type, send_key, send_mode)
     # do login
     login(username, pwd, pub_key)
     # do study
     post_study_record()
+    # send success message
+    send_msg("打卡成功")
 
 
 def start_with_workflow():

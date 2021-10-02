@@ -33,6 +33,9 @@ jobs:
         ocrSecret: ${{secrets.OCR_SECRET_KEY}}
         ocrKey: ${{secrets.OCR_API_KEY}}
         ocrType: ${{secrets.OCR_TYPE}}
+        sendType: ${{secrets.SEND_TYPE}}
+        sendKey: ${{secrets.SEND_KEY}}
+        sendMode: ${{secrets.SEND_MODE}}
       run:
         python3 workflow.py
         
