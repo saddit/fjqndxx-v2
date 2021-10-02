@@ -6,7 +6,13 @@
     "private": "此处不用填写"
   },
   "ocr": {
+    "type": "默认为baidu_image"
     "sk": "填写baidu ocr的 SecretKey",
     "ak": "填写ApiKey"
+  },
+  "send": {
+    "type": "不填写则不开启",
+    "key": "填写server酱或其他的SendKey",
+    "mode": "默认fail(fail/success/both)"
   }
 }

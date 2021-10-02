@@ -18,7 +18,9 @@
 
 **浙江团员可以点击这里[青春浙江](https://gist.github.com/838239178/ddad90e8c5e52f5fa8f0febea6109f24)**
 
-*如果你有新的或更好OCR识别方式 请参考 [OCR贡献文档](./doc/OCR_Module_Rule.md) 做出你的贡献！*
+:pen:如果你有新的或更好OCR识别方式 请参考 [OCR贡献文档](./doc/OCR_Module_Rule.md) 做出你的贡献！
+
+:pen: 如果你有新的或更好消息推送方式 请参考 [消息推送贡献文档](./doc/send_module_rule.md) 做出你的贡献！
 
 ## 使用方法
 
@@ -56,4 +58,24 @@ GithubAction（可选）添加新的secrets OCR_TYPE 来指定识别类型
 其他方式在config.json中修改指定配置项即可
 
 - baidu_image [默认方法,需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/)
+
+## 可选消息推送
+
+> 仅 `1.2.2` 版本及以上可用
+
+使用消息推送 如微信推送、QQ推送
+
+### 配置
+
+GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使用消息推送
+
+普通用户可查看最新的 `config.json.bak` 浏览新配置项
+
+**配置项解读**
+
+| 配置项    | 说明                                                         | 可选值                                        |
+| --------- | ------------------------------------------------------------ | --------------------------------------------- |
+| send_type | 消息推送类型 **不填写则不推送**                              | [server_chan](./doc/send_help/server_chan.md) |
+| send_key  | 消息推送服务的密钥 在推送服务的官网注册获得                  |                                               |
+| send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                             |
 
