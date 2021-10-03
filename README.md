@@ -79,3 +79,7 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 | send_key  | 消息推送服务的密钥 在推送服务的官网注册获得                  |                                               |
 | send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                             |
 
+## 赏我一杯Coffee
+
+<img src="https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/1633171164.jpg" alt="1633171164" style="zoom:25%;" /><img src="https://raw.githubusercontent.com/838239178/PicgoBed/main/img/qq_pic_merged_1633171137809.jpg" alt="qq_pic_merged_1633171137809" style="zoom: 50%;" />
+
