@@ -83,5 +83,7 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 
 ## 赏我一杯Coffee
 
-<img src="https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/1633171164.jpg" alt="1633171164" style="zoom:25%;" /><img src="https://raw.githubusercontent.com/838239178/PicgoBed/main/img/qq_pic_merged_1633171137809.jpg" alt="qq_pic_merged_1633171137809" style="zoom: 50%;" />
+
+
+![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f3833383233393137382f506963676f4265642f696d672f313633333137313136342e6a7067.jpg)![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/qq_pic_merged_1633171137809.jpg)
 
