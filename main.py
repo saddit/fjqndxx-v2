@@ -105,9 +105,11 @@ def get_profile_from_config():
         api_key = config_json.get('ocr').get('ak')
         secret_key = config_json.get('ocr').get('sk')
         ocr_type = config_json.get('ocr').get('type')
-        send_type = config_json.get('send').get('type')
-        send_key = config_json.get('send').get('key')
-        send_mode = config_json.get('send').get('mode')
+        sendConfig = config_json.get('send')
+        if sendConfig is not None:
+            send_type = sendConfig.get('type')
+            send_key = sendConfig.get('key')
+            send_mode = sendConfig.get('mode')
     return username, pwd, pub_key, \
            api_key, secret_key, ocr_type, \
            send_type, send_key, send_mode
