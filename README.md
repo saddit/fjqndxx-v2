@@ -1,6 +1,6 @@
 # 青年大学习/团课自动打卡
 
-![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.7+-green.svg) ![](https://img.shields.io/badge/License-Apache2.0-green.svg)
+![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.7+-green.svg)
 
 > 2021.04.24：添加失败重试功能，使用针对性更强的OCR识别接口  
 > 
