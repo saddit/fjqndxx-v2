@@ -20,6 +20,8 @@
 
 **浙江团员可以点击这里[青春浙江](https://gist.github.com/838239178/ddad90e8c5e52f5fa8f0febea6109f24)**
 
+### 参与贡献！
+
 :pen:如果你有新的或更好OCR识别方式 请参考 [OCR贡献文档](./doc/OCR_Module_Rule.md) 做出你的贡献！
 
 :pen: 如果你有新的或更好消息推送方式 请参考 [消息推送贡献文档](./doc/send_module_rule.md) 做出你的贡献！
