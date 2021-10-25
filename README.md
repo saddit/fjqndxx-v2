@@ -6,7 +6,7 @@
 > 
 > 2021.07.09：官方服务器服务采用了https协议 导致发生bug 已修复
 > 
-> 2021.09.28：修复登录异常问题 更换了 **密钥(pubKey)** 和加密方法 请务必fork此最新版本并更换配置文件的public或github_secret的pub_key！
+> **2021.09.28**：:warning: **[重要更新]** 修复登录异常问题 更换了 **密钥(pubKey)** 和加密方法 请务必fork此最新版本并更换配置文件的public或github_secret的pub_key！
 >
 > 2021.10.01: 为Pull Request创造workflow检查因此注释了run.yml中的定时执行条件 新fork用户需自行取消注释
 >
