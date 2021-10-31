@@ -45,9 +45,9 @@ def init_logger():
 
 
 def error_exit(msg: str):
-    logging.error(msg)
     send_msg(content=msg, success=False)
-    exit(-1)
+    logging.exception(msg)
+    raise
 
 
 def get_validate_code() -> str:
