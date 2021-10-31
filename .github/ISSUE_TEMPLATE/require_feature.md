@@ -1,6 +1,10 @@
 ---
 name: 功能建议
 about: 如果有需求或者建议请用此模板
+title: "[Feature]"
+labels: feature
+assignees: ''
+
 ---
 
 ## 需求描述
