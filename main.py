@@ -212,9 +212,11 @@ def run(use_config: bool):
 
 def start_with_workflow():
     init_logger()
+    logging.info("你正在使用GitHubAction,请确保secret已经配置")
     run(False)
 
 
 if __name__ == '__main__':
     init_logger()
+    logging.info("你正在使用本地服务,请确保填写了配置文件")
     run(True)
