@@ -70,7 +70,9 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 | 配置项    | 说明                                                         | 可选值                                        |
 | --------- | ------------------------------------------------------------ | --------------------------------------------- |
 | send_type | 消息推送类型 **不填写则不推送**                              | qqbot |
-| send_key  | 消息推送服务的密钥                  |                                               |
+| api_url | 消息推送服务的API地址 | https://xxx/send_private_msg |
+| access_token | 消息推送服务的密钥 | |
+| user_id | 消息推送服务的推送对象 | 6666600 |
 | send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                             |
 
  
