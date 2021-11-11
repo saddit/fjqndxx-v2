@@ -166,12 +166,12 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
 def init_sender(send_type, send_key, send_mode):
     if send_type is None or send_type == '':
         return
-    if send_key is None or send_key == '':
-        error_exit('缺少配置信息: send_key')
+    if os.environ['accessToken'] is None or os.environ['accessToken'] == '':
+        error_exit('缺少配置信息: access_token')
     else:
         send_util['enable'] = True
         send_util['sender'] = importlib.import_module(f"send_module.{send_type}.sender")
-        send_util['sender'].set_key(send_key)
+        send_util['sender'].set_key(os.environ['accessToken'])
         if send_mode is not None and send_mode != "":
             send_util['mode'] = send_mode
 
