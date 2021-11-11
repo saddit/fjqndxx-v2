@@ -3,11 +3,6 @@ import requests
 sess = requests.session()
 send_key = ""
 
-
-def set_key(key):
-    global send_key
-    send_key = key
-
 def set_access_token(token):
     global access_token
     access_token = token
@@ -30,6 +25,6 @@ def send(title, content) -> dict:
     success = res['status'] == 'ok'
     return {
         'success': success,
-        'message': res['message'] if not success else '发送成功'
+        'message': res['status'] if not success else '发送成功'
     }
 
