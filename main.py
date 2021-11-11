@@ -171,7 +171,9 @@ def init_sender(send_type, send_key, send_mode):
     else:
         send_util['enable'] = True
         send_util['sender'] = importlib.import_module(f"send_module.{send_type}.sender")
-        send_util['sender'].set_key(os.environ['accessToken'])
+        send_util['sender'].set_user_id(os.environ['userId'])
+        send_util['sender'].set_api_url(os.environ['apiUrl'])
+        send_util['sender'].set_access_token(os.environ['accessToken'])
         if send_mode is not None and send_mode != "":
             send_util['mode'] = send_mode
 
