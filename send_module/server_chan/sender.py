@@ -27,7 +27,7 @@ def send(title, content) -> dict:
         'message': f"# {title}\n\n{content}"
     })
     res = resp.json()
-    success = res['code'] == 0
+    success = res['status'] == 'ok'
     return {
         'success': success,
         'message': res['message'] if not success else '发送成功'
