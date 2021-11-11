@@ -36,6 +36,9 @@ jobs:
         sendType: ${{secrets.SEND_TYPE}}
         sendKey: ${{secrets.SEND_KEY}}
         sendMode: ${{secrets.SEND_MODE}}
+        userId: ${{secrets.USER_ID}}
+        accessToken: ${{secrets.ACCESS_TOKEN}}
+        apiUrl: ${{secrets.API_URL}}
       run:
         python3 workflow.py
         
