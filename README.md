@@ -1,6 +1,6 @@
 # 青年大学习/团课自动打卡
 
-![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.7+-green.svg)
+![](https://github.com/TsinbeiTech/AutoStudyCyol/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.7+-green.svg)
 
 > 2021.04.24：添加失败重试功能，使用针对性更强的OCR识别接口  
 > 
@@ -17,7 +17,7 @@
 
 ## 使用方法
 
-#### 🍎pub_key:
+#### pub_key:
 
 ```
 A7E74D2B6282AEB1C5EA3C28D25660A7
@@ -69,9 +69,9 @@ GithubAction用户可通过添加secrets：send_type, api_url , access_token , u
 | 配置项    | 说明                                                         | 可选值                                        |
 | --------- | ------------------------------------------------------------ | --------------------------------------------- |
 | send_type | 消息推送类型 **不填写则不推送**                              | qqbot |
-| api_url | 消息推送服务的API地址 | https://xxx/send_private_msg |
-| access_token | 消息推送服务的密钥 | |
-| user_id | 消息推送服务的推送对象 | 6666600 |
+| api_url | QQ机器人的API地址 | https://xxx/send_private_msg |
+| access_token | QQ机器人的AccessToken **（可为空）** | |
+| user_id | 你的QQ号**（需加机器人为好友）** | 6666600 |
 | send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                             |
 
  
