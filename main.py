@@ -123,11 +123,14 @@ def get_profile_from_env():
     secret_key = os.environ['ocrSecret']
     ocr_type = os.environ['ocrType']
     send_type = os.environ['sendType']
-    send_key = os.environ['sendKey']
+    api_url = os.environ['apiUrl']
+    access_token = os.environ['accessToken']
+    user_id = os.environ['userId']
     send_mode = os.environ['sendMode']
     return username, pwd, pub_key, \
            api_key, secret_key, ocr_type, \
-           send_type, send_key, send_mode
+           send_type, api_url, access_token, \
+           user_id, send_mode
 
 
 def login(username, pwd, pub_key):
@@ -163,15 +166,21 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
     logging.info(f"使用 OCR {ocr_type}")
 
 
-def init_sender(send_type, send_key, send_mode):
+def init_sender(send_type, api_url ,access_token ,user_id , send_mode):
     if send_type is None or send_type == '':
         return
-    if send_key is None or send_key == '':
-        error_exit('缺少配置信息: send_key')
+    if api_url is None or api_url == '':
+        error_exit('缺少配置信息: apiUrl')
+    if access_token is None or access_token == '':
+        error_exit('缺少配置信息: accessToken')
+    if user_id is None or user_id == '':
+        error_exit('缺少配置信息: userId')
     else:
         send_util['enable'] = True
         send_util['sender'] = importlib.import_module(f"send_module.{send_type}.sender")
-        send_util['sender'].set_key(send_key)
+        send_util['sender'].set_api_url(api_url)
+        send_util['sender'].set_access_token(access_token)
+        send_util['sender'].set_user_id(user_id)
         if send_mode is not None and send_mode != "":
             send_util['mode'] = send_mode
 
@@ -197,7 +206,8 @@ def run(use_config: bool):
     # get default config
     username, pwd, pub_key, \
     api_key, secret_key, ocr_type, \
-    send_type, send_key, send_mode = get_profile_from_config() if use_config else get_profile_from_env()
+    send_type, api_url , access_token, \
+    user_id, send_mode = get_profile_from_config() if use_config else get_profile_from_env()
     # init ocr module
     init_ocr(ocr_type, api_key, secret_key)
     # init sender
