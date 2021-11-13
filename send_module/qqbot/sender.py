@@ -1,7 +1,9 @@
 import requests
 
 sess = requests.session()
-send_key = ""
+access_token = ""
+api_url = ""
+user_id = ""
 
 def set_access_token(token):
     global access_token
