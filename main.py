@@ -108,11 +108,14 @@ def get_profile_from_config():
         sendConfig = config_json.get('send')
         if sendConfig is not None:
             send_type = sendConfig.get('type')
-            send_key = sendConfig.get('key')
+            api_url = sendConfig.get('url')
+            access_token = sendConfig.get('token')
+            user_id = sendConfig.get('id')
             send_mode = sendConfig.get('mode')
     return username, pwd, pub_key, \
            api_key, secret_key, ocr_type, \
-           send_type, send_key, send_mode
+           send_type, api_url, access_token, \
+           user_id, send_mode
 
 
 def get_profile_from_env():
@@ -211,7 +214,7 @@ def run(use_config: bool):
     # init ocr module
     init_ocr(ocr_type, api_key, secret_key)
     # init sender
-    init_sender(send_type, send_key, send_mode)
+    init_sender(send_type, api_url , access_token, user_id, send_mode)
     # do login
     login(username, pwd, pub_key)
     # do study
