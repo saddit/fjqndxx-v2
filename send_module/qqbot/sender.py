@@ -19,9 +19,9 @@ def set_user_id(id):
 
 def send(title, content) -> dict:
     resp = sess.post(url=f"{api_url}", data={
-        'access_token': f"{access_token}",
-        'user_id': f"{user_id}",
-        'message': f"# {title}\n\n{content}"
+        "access_token" : f"{access_token}",
+        "user_id" : f"{user_id}",
+        "message" : f"{title}\n\n{content}"
     })
     res = resp.json()
     success = res['status'] == 'ok'
