@@ -124,6 +124,9 @@ def get_profile_from_env():
     ocr_type = os.environ['ocrType']
     send_type = os.environ['sendType']
     send_key = os.environ['sendKey']
+    api_url = os.environ['apiUrl']
+    access_token = os.environ['accessToken']
+    user_id = os.environ['userId']
     send_mode = os.environ['sendMode']
     return username, pwd, pub_key, \
            api_key, secret_key, ocr_type, \
