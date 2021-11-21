@@ -9,7 +9,7 @@ def set_api_url(url):
     global api_url
     api_url = url
 
-def set_key(token):
+def set_access_token(token):
     global access_token
     access_token = token
 
