@@ -1,24 +1,24 @@
 import requests
 
 sess = requests.session()
-send_key = ""
 user_id = ""
+access_token = ""
 api_url = ""
 
 def set_api_url(url):
     global api_url
     api_url = url
 
-def set_key(key):
-    global send_key
-    send_key = key
+def set_key(token):
+    global access_token
+    access_token = token
 
 def set_user_id(id):
     global user_id
     user_id = id
 
 def send(title, content) -> dict:
-    resp = sess.post(url=f"{api_url}/send_private_msg?access_token={send_key}", data={
+    resp = sess.post(url=f"{api_url}/send_private_msg?access_token={access_token}", data={
         'user_id': f"{user_id}",
         'message': f"# {title}\n\n{content}"
     })
