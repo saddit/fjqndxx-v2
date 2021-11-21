@@ -167,7 +167,7 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
     logging.info(f"使用 OCR {ocr_type}")
 
 
-def init_sender(send_type, send_key, send_mode):
+def init_sender(send_type, send_key, api_url, access_token, user_id, send_mode):
     if send_type is None or send_type == '':
         return
     if send_key is None or send_key == '' and send_type == 'server_chan':
@@ -216,7 +216,7 @@ def run(use_config: bool):
     # init ocr module
     init_ocr(ocr_type, api_key, secret_key)
     # init sender
-    init_sender(send_type, send_key, send_mode)
+    init_sender(send_type, send_key, api_url, access_token, user_id, send_mode)
     # do login
     login(username, pwd, pub_key)
     # do study
