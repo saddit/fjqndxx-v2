@@ -46,8 +46,8 @@ def init_logger():
 
 def error_exit(msg: str):
     send_msg(content=msg, success=False)
-    logging.exception(msg)
-    raise
+    logging.exception(f"异常信息: {msg}")
+    exit(-1)
 
 
 def get_validate_code() -> str:
@@ -154,10 +154,12 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
     global ocr_util
     if ocr_type is None or ocr_type == '':
         ocr_type = "baidu_image"
+
     try:
         ocr_util = importlib.import_module(f"ocr_module.{ocr_type}.{ocr_type}_ocr")
     except ModuleNotFoundError:
         error_exit("ocr类型不存在,请更换类型")
+
     if ocr_util.is_need_keys():
         ocr_util.set_keys(ak, sk)
     logging.info(f"使用 OCR {ocr_type}")
@@ -169,8 +171,12 @@ def init_sender(send_type, send_key, send_mode):
     if send_key is None or send_key == '':
         error_exit('缺少配置信息: send_key')
     else:
+        try:
+            send_util['sender'] = importlib.import_module(f"send_module.{send_type}.sender")
+        except ModuleNotFoundError:
+            error_exit("消息推送类型不存在，请更换类型")
+
         send_util['enable'] = True
-        send_util['sender'] = importlib.import_module(f"send_module.{send_type}.sender")
         send_util['sender'].set_key(send_key)
         if send_mode is not None and send_mode != "":
             send_util['mode'] = send_mode
