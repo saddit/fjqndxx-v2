@@ -6,7 +6,6 @@ access_token = ""
 api_url = ""
 group_id = ""
 at_user = ""
-message_type = ""
 
 def set_api_url(url):
     global api_url
@@ -20,15 +19,16 @@ def set_group_id(id):
     global group_id
     group_id = id
     
-def set_at_user(type):
+def set_at_user(user):
     global at_user
-    at_user = type
+    at_user = user
     
 def set_user_id(id):
     global user_id
     user_id = id
 
 def send(title, content) -> dict:
+    global at_user
     empty = group_id == ""
     noat = at_user == ""
     if noat and empty:
