@@ -5,7 +5,7 @@ user_id = ""
 access_token = ""
 api_url = ""
 group_id = ""
-at_user = false
+at_user = ""
 message_type = ""
 
 def set_api_url(url):
@@ -30,6 +30,8 @@ def set_user_id(id):
 
 def send(title, content) -> dict:
     empty = group_id == ""
+    if at_user is None and group_id is None:
+                      at_user = user_id
     if empty:
             resp = sess.post(url=f"{api_url}/send_private_msg?access_token={access_token}", data={
                 'user_id': f"{user_id}",
@@ -38,7 +40,7 @@ def send(title, content) -> dict:
     else:
         resp = sess.post(url=f"{api_url}/send_group_msg?access_token={access_token}", data={
                 'group_id': f"{group_id}",
-                'message': f"[CQ:at,qq={user_id}]\n\n{title}\n\n{content}" if at_user else f"{title}\n\n{content}"
+                'message': f"[CQ:at,qq={user_id}]\n\n{title}\n\n{content}" if not at_user is None else f"{title}\n\n{content}"
             })
     res = resp.json()
     success = res['status'] == "ok"
