@@ -131,7 +131,8 @@ def get_profile_from_env():
     return username, pwd, pub_key, \
            api_key, secret_key, ocr_type, \
            send_type, send_key, api_url, \
-           access_token, user_id, send_mode
+           access_token, user_id, group_id, \
+           at_user, send_mode
 
 
 def login(username, pwd, pub_key):
@@ -167,7 +168,7 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
     logging.info(f"使用 OCR {ocr_type}")
 
 
-def init_sender(send_type, send_key, api_url, access_token, user_id, send_mode):
+def init_sender(send_type, send_key, api_url, access_token, user_id, group_id, at_user, send_mode):
     if send_type is None or send_type == '':
         return
     if send_key is None or send_key == '' and send_type == 'server_chan':
@@ -187,6 +188,8 @@ def init_sender(send_type, send_key, api_url, access_token, user_id, send_mode):
               send_util['sender'].set_api_url(api_url)
               send_util['sender'].set_access_token(access_token)
               send_util['sender'].set_user_id(user_id)
+              send_util['sender'].set_group_id(group_id)
+              send_util['sender'].set_at_user(at_user)
         if send_mode is not None and send_mode != "":
             send_util['mode'] = send_mode    
 
@@ -197,8 +200,8 @@ def send_msg(content, success=True):
             or (send_util['mode'] == 'fail' and not success) \
             or (send_util['mode'] == 'success' and success):
         res = send_util['sender'].send(title="青年大学习打卡",
-                                       content=f"**状态：** {'成功' if success else '失败'}\n\n"
-                                               f"**信息：** {content}")
+                                       content=f"状态: {'成功' if success else '失败'}\n\n"
+                                               f"信息：{content}")
         if not res['success']:
             logging.warning(f"消息推送失败，原因：{res['message']}")
         else:
@@ -212,11 +215,12 @@ def run(use_config: bool):
     username, pwd, pub_key, \
     api_key, secret_key, ocr_type, \
     send_type, send_key, api_url, \
-    access_token, user_id, send_mode = get_profile_from_config() if use_config else get_profile_from_env()
+    access_token, user_id, group_id, \
+    at_user, send_mode = get_profile_from_config() if use_config else get_profile_from_env()
     # init ocr module
     init_ocr(ocr_type, api_key, secret_key)
     # init sender
-    init_sender(send_type, send_key, api_url, access_token, user_id, send_mode)
+    init_sender(send_type, send_key, api_url, access_token, user_id, group_id, at_user, send_mode)
     # do login
     login(username, pwd, pub_key)
     # do study
