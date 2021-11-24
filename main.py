@@ -202,7 +202,7 @@ def send_msg(content, success=True):
             or (send_util['mode'] == 'fail' and not success) \
             or (send_util['mode'] == 'success' and success):
         res = send_util['sender'].send(title="青年大学习打卡",
-                                       content=f"状态: {'成功' if success else '失败'}\n\n"
+                                       content=f"状态：{'成功' if success else '失败'}\n\n"
                                                f"信息：{content}")
         if not res['success']:
             logging.warning(f"消息推送失败，原因：{res['message']}")
