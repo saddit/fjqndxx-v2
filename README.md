@@ -72,7 +72,7 @@ GithubAction用户可通过添加secrets：send_type, api_url , access_token , u
 |send_key |server酱的密钥||
 | api_url | QQ机器人的API地址 | https://xxx |
 | access_token | QQ机器人的AccessToken **（可为空）** | |
-| user_id | 你的QQ号**（需加机器人为好友）** | 6666600 |
+| user_id | 你的QQ号 **（需加机器人为好友）**  | 6666600 |
 | send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                             |
 
  
