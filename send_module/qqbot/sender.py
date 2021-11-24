@@ -31,7 +31,7 @@ def set_user_id(id):
 def send(title, content) -> dict:
     empty = group_id == ""
     if at_user is None and group_id is None:
-                      at_user = user_id
+                                           at_user = user_id
     if empty:
             resp = sess.post(url=f"{api_url}/send_private_msg?access_token={access_token}", data={
                 'user_id': f"{user_id}",
