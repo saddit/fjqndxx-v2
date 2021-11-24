@@ -39,6 +39,8 @@ jobs:
         userId: ${{secrets.USER_ID}}
         accessToken: ${{secrets.ACCESS_TOKEN}}
         apiUrl: ${{secrets.API_URL}}
+        groupId: ${{secrets.GROUP_ID}}
+        atUser: ${{secrets.AT_USER}}
       run:
         python3 workflow.py
         
