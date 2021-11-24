@@ -127,6 +127,8 @@ def get_profile_from_env():
     api_url = os.environ['apiUrl']
     access_token = os.environ['accessToken']
     user_id = os.environ['userId']
+    group_id = os.environ['groupId']
+    at_user = os.environ['atUser']
     send_mode = os.environ['sendMode']
     return username, pwd, pub_key, \
            api_key, secret_key, ocr_type, \
