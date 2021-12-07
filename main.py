@@ -144,9 +144,9 @@ def get_profile_from_env():
             "pwd": None
         }
         if len(usr_split) > 0:
-            account['username'] = account[0]
+            account['username'] = usr_split[0]
         if len(usr_split) > 1:
-            account['pwd'] = account[1]
+            account['pwd'] = usr_split[1]
         accounts.append(account)
     return username, pwd, pub_key, \
            api_key, secret_key, ocr_type, \
