@@ -83,7 +83,7 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 
 > 仅支持 `1.2.3` 以上版本
 
-配置多个账号一起打卡
+配置多个账号一起打卡 PS:目前在试验阶段 有问题请及时回馈
 
 1. 在 `Github Action` 上配置
 
@@ -94,7 +94,7 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
    手机号2 密码2
     ```
    
-   原先配置的secrets不需要改动
+   原先配置的secrets不需要改动，建议自己保存好多人的账号密码，以便以后增加或删除账号
 
 2. 在本地 `config.json` 上配置
 

@@ -213,10 +213,15 @@ def send_msg(content, success=True):
             logging.info(f"消息推送成功")
 
 
-def multi_login(accounts, pub_key):
+def multi_study(accounts, pub_key):
+    logging.info(f"开始多人打卡，人数{len(accounts)}")
     push_msg = ""
     all_success = True
     for account in accounts:
+        if account['username'] is None or account['pwd'] is None:
+            logging.warning("多人打卡配置存在错误,将跳过部分用户,请检查配置的用户名密码格式")
+            continue
+
         try:
             login(account['username'], account['pwd'], pub_key)
             post_study_record()
@@ -228,7 +233,8 @@ def multi_login(accounts, pub_key):
     send_msg(push_msg, all_success)
 
 
-def single_login(username, password, pub_key):
+def single_study(username, password, pub_key):
+    logging.info("开始单人打卡")
     # do login
     login(username, password, pub_key)
     # do study
@@ -252,9 +258,9 @@ def run(use_config: bool):
     # study proc
     if accounts is not None and len(accounts) > 0:
         accounts.append({"username": username, "pwd": pwd})
-        multi_login(accounts, pub_key)
+        multi_study(accounts, pub_key)
     else:
-        single_login(username, pwd, pub_key)
+        single_study(username, pwd, pub_key)
 
 
 def start_with_workflow():
