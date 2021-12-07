@@ -79,9 +79,28 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 | send_key  | 消息推送服务的密钥 在推送服务的官网注册获得                  |                                               |
 | send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                             |
 
+## 多人打卡
+
+> 仅支持 `1.2.3` 以上版本
+
+配置多个账号一起打卡
+
+1. 在 `Github Action` 上配置
+
+    添加新secrets `EXT_USERS`, 按以下格式填写账号：
+    
+    ```text
+   手机号1 密码1
+   手机号2 密码2
+    ```
+   
+   原先配置的secrets不需要改动
+
+2. 在本地 `config.json` 上配置
+
+   参考 [config.json.bak](./config.json.bak) 的内容添加新的配置，原配置不需要改动
+
 ## 赏我一杯Coffee
-
-
 
 ![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f3833383233393137382f506963676f4265642f696d672f313633333137313136342e6a7067.jpg)![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/qq_pic_merged_1633171137809.jpg)
 
