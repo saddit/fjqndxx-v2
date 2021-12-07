@@ -35,6 +35,7 @@ jobs:
         sendType: ${{secrets.SEND_TYPE}}
         sendKey: ${{secrets.SEND_KEY}}
         sendMode: ${{secrets.SEND_MODE}}
+        extUsers: ${{secrets.EXT_USERS}}
       run:
         python3 workflow.py
         

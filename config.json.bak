@@ -14,5 +14,11 @@
     "type": "不填写则不开启",
     "key": "填写server酱或其他的SendKey",
     "mode": "默认fail(fail/success/both)"
-  }
+  },
+  "extUsers": [
+    {
+      "username": "",
+      "pwd": ""
+    }
+  ]
 }

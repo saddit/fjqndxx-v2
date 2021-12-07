@@ -2,17 +2,11 @@
 
 ![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.7+-green.svg)
 
-> 2021.04.24：添加失败重试功能，使用针对性更强的OCR识别接口  
-> 
-> 2021.07.09：官方服务器服务采用了https协议 导致发生bug 已修复
-> 
+[此处展示重要更新日志，完整日志搓这里](./doc/Log.md)
+
 > **2021.09.28**：:warning: **[重要更新]** 修复登录异常问题 更换了 **密钥(pubKey)** 和加密方法 请务必fork此最新版本并更换配置文件的public或github_secret的pub_key！
->
-> 2021.10.01: 为Pull Request创造workflow检查因此注释了run.yml中的定时执行条件 新fork用户需自行取消注释
->
-> 2021.10.02: 新增消息推送功能——微信Server酱
 > 
-> 2021.11.23: 改善消息推送配置错误时的异常提示 
+> 2021.10.02: 新增消息推送功能——微信Server酱
 
 🤺妈妈再也不用担心我团课没看被团支书赶着催了
 
@@ -85,9 +79,28 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 | send_key  | 消息推送服务的密钥 在推送服务的官网注册获得                  |                                               |
 | send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                             |
 
+## 多人打卡
+
+> 仅支持 `1.2.3` 以上版本
+
+配置多个账号一起打卡 PS:目前在试验阶段 有问题请及时回馈
+
+1. 在 `Github Action` 上配置
+
+    添加新secrets `EXT_USERS`, 按以下格式填写账号：
+    
+    ```text
+   手机号1 密码1
+   手机号2 密码2
+    ```
+   
+   原先配置的secrets不需要改动，建议自己保存好多人的账号密码，以便以后增加或删除账号
+
+2. 在本地 `config.json` 上配置
+
+   参考 [config.json.bak](./config.json.bak) 的内容添加新的配置，原配置不需要改动
+
 ## 赏我一杯Coffee
-
-
 
 ![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f3833383233393137382f506963676f4265642f696d672f313633333137313136342e6a7067.jpg)![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/qq_pic_merged_1633171137809.jpg)
 
