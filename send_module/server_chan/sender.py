@@ -12,7 +12,7 @@ def set_key(key):
 def send(title, content) -> dict:
     resp = sess.post(url=f"https://sctapi.ftqq.com/{send_key}.send", data={
         'text': f"{title}",
-        'desp': f"# {title}\n\n{content}"
+        'desp': f"# {title}\n\n```\n{content}\n```"
     })
     res = resp.json()
     success = res['code'] == 0
