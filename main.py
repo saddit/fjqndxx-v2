@@ -138,8 +138,16 @@ def get_profile_from_env():
     ext_users = os.environ['extUsers']
     accounts = []
     for userLine in ext_users.split('\n'):
-        account = userLine.split(" ")
-        accounts.append({"username": account[0], "pwd": account[1]})
+        usr_split = userLine.split(" ")
+        account = {
+            "username": None,
+            "pwd": None
+        }
+        if len(usr_split) > 0:
+            account['username'] = account[0]
+        if len(usr_split) > 1:
+            account['pwd'] = account[1]
+        accounts.append(account)
     return username, pwd, pub_key, \
            api_key, secret_key, ocr_type, \
            send_type, send_key, send_mode, accounts
