@@ -10,9 +10,10 @@ def set_key(key):
 
 
 def send(title, content) -> dict:
+    content.replace("\n", "\n\n")
     resp = sess.post(url=f"https://sctapi.ftqq.com/{send_key}.send", data={
         'text': f"{title}",
-        'desp': f"# {title}\n\n```\n{content}\n```"
+        'desp': f"# {title}\n\n{content}"
     })
     res = resp.json()
     success = res['code'] == 0
