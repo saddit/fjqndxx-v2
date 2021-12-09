@@ -265,7 +265,7 @@ def run(use_config: bool):
     init_sender(send_type, send_key, send_mode)
     # study proc
     if accounts is not None and len(accounts) > 0:
-        if pwd != "" and username != "":
+        if pwd is not None and username is not None and pwd != "" and username != "":
             accounts.append({"username": username, "pwd": pwd})
         multi_study(accounts, pub_key)
     else:
