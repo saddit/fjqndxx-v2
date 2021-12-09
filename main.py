@@ -235,7 +235,7 @@ def multi_study(accounts, pub_key):
             post_study_record()
             push_msg += f"尾号{account['username'][-4:]}打卡成功\n"
         except KnownException as e:
-            push_msg += f"{e}\n"
+            push_msg += f"尾号{account['username'][-4:]}失败:{e}\n"
             all_success = False
     push_msg += "全部打卡成功" if all_success else "部分打卡失败"
     send_msg(push_msg, all_success)
