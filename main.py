@@ -98,7 +98,7 @@ def post_login(username: str, pwd: str, validate_code, pub_key):
 
     if resp.status_code == requests.codes.ok:
         if resp.json().get('success'):
-            logging.info(username + ' login ' + resp.json().get('errmsg'))
+            logging.info(username[-4:] + ' login ' + resp.json().get('errmsg'))
         else:
             raise ConnectionError(resp.json().get('errmsg'))
     else:
@@ -156,7 +156,7 @@ def get_profile_from_env():
 def login(username, pwd, pub_key):
     max_try = 5
     has_try = 0
-
+    logging.info(f"正在登录尾号{username[-4:]}")
     while has_try < max_try:
         # get validate code
         code = get_validate_code()
@@ -165,13 +165,13 @@ def login(username, pwd, pub_key):
             post_login(username, pwd, code, pub_key)
             break
         except ConnectionError as e:
-            logging.error(f'{username}登录失败，原因:{e}')
+            logging.error(f'尾号{username[-4:]}登录失败，原因:{e}')
             logging.info(f'尝试重新登录，重试次数{has_try}')
             has_try += 1
             time.sleep(1)
 
     if has_try == max_try:
-        error_raise(f"{username}尝试登录失败")
+        error_raise(f"尾号{username[-4:]}尝试登录失败")
 
 
 def init_ocr(ocr_type: str, ak: str, sk: str):
@@ -233,9 +233,9 @@ def multi_study(accounts, pub_key):
         try:
             login(account['username'], account['pwd'], pub_key)
             post_study_record()
-            push_msg += f"{account['username']}打卡成功\n"
+            push_msg += f"尾号{account['username'][-4:]}打卡成功\n"
         except KnownException as e:
-            push_msg += f"{e}\n"
+            push_msg += f"尾号{account['username'][-4:]}失败:{e}\n"
             all_success = False
     push_msg += "全部打卡成功" if all_success else "部分打卡失败"
     send_msg(push_msg, all_success)
@@ -265,7 +265,8 @@ def run(use_config: bool):
     init_sender(send_type, send_key, send_mode)
     # study proc
     if accounts is not None and len(accounts) > 0:
-        accounts.append({"username": username, "pwd": pwd})
+        if pwd is not None and username is not None and pwd != "" and username != "":
+            accounts.append({"username": username, "pwd": pwd})
         multi_study(accounts, pub_key)
     else:
         single_study(username, pwd, pub_key)
