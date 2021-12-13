@@ -102,6 +102,8 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 
    参考 [config.json.bak](./config.json.bak) 的内容添加新的配置，原配置不需要改动
 
+~~请让你的小伙伴也来点个Star吧~~
+
 ## 赏我一杯Coffee
 
 ![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f3833383233393137382f506963676f4265642f696d672f313633333137313136342e6a7067.jpg)![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/qq_pic_merged_1633171137809.jpg)
