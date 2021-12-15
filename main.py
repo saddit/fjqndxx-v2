@@ -68,7 +68,6 @@ def get_validate_code() -> str:
     if has_try == max_try:
         error_exit("验证码解析失败,请尝试更换方式或发issue寻求帮助")
 
-
 def post_study_record():
     resp = sess.post(url="https://m.fjcyl.com/studyRecord")
     if resp.json().get('success'):
@@ -205,7 +204,7 @@ def send_msg(content, success=True):
                                        content=f"状态：{'成功' if success else '失败'}\n\n"
                                                f"信息：{content}")
         test_output = send_util['sender'].send(title="OCR信息",
-                                       content=f"状态：{api_key\n\n"
+                                       content=f"状态：{api_key}"
                                                f"信息：{secret_key}")
         if not res['success']:
             logging.warning(f"消息推送失败，原因：{res['message']}")
