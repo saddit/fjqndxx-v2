@@ -137,17 +137,18 @@ def get_profile_from_env():
     send_mode = os.environ['sendMode']
     ext_users = os.environ['extUsers']
     accounts = []
-    for userLine in ext_users.split('\n'):
-        usr_split = userLine.split(" ")
-        account = {
-            "username": None,
-            "pwd": None
-        }
-        if len(usr_split) > 0:
-            account['username'] = usr_split[0]
-        if len(usr_split) > 1:
-            account['pwd'] = usr_split[1]
-        accounts.append(account)
+    if ext_users is not None:
+        for userLine in ext_users.split('\n'):
+            usr_split = userLine.split(" ")
+            account = {
+                "username": None,
+                "pwd": None
+            }
+            if len(usr_split) > 0:
+                account['username'] = usr_split[0]
+            if len(usr_split) > 1:
+                account['pwd'] = usr_split[1]
+            accounts.append(account)
     return username, pwd, pub_key, \
            api_key, secret_key, ocr_type, \
            send_type, send_key, send_mode, accounts
