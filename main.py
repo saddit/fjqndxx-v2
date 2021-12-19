@@ -137,6 +137,7 @@ def get_profile_from_env():
     send_mode = os.environ['sendMode']
     ext_users = os.environ['extUsers']
     accounts = []
+    logging.info(ext_users)
     if ext_users is not None:
         for userLine in ext_users.split('\n'):
             usr_split = userLine.split(" ")
