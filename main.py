@@ -27,16 +27,6 @@ send_util = {
     'mode': 'fail',
 }
 
-"""
-脚本识别验证码使用的是百度的api，使用前请先申请百度ocr的key！或者更改baidu_image/ocr.py中的代码来使用你所知道的api
-运行方法：
-    1. 直接运行main.py
-        将config.json.bak更名为config.json, 填写config数据为你自己的数据，然后直接运行即可
-    2. 通过GitHubAction等自动化工具
-        不运行此脚本，运行workflow.py, 以GithubAction为例，你需要添加五个secrets，分别为
-        username, pwd, pub_key, ocr_api_key, ocr_secret_key
-"""
-
 
 def catch_exception(func):
     @wraps(func)
@@ -282,12 +272,8 @@ def run(use_config: bool):
 def start_with_workflow():
     init_logger()
     logging.info("你正在使用GitHubAction,请确保secret已经配置")
-    # run(False)
-    resp = sess.get(url="https://m.fjcyl.com")
-    if resp.ok:
-        logging.info("ping m.fjcyl.com ok")
-    else:
-        logging.info("ping m.fjcyl.com error, resp="+resp.content)
+    logging.warn("GithubAction 目前可能无法使用，请暂时更换平台")
+    run(False)
 
 
 if __name__ == '__main__':
