@@ -7,6 +7,10 @@
 > **2021.09.28**：:warning: **[重要更新]** 修复登录异常问题 更换了 **密钥(pubKey)** 和加密方法 请务必fork此最新版本并更换配置文件的public或github_secret的pub_key！
 > 
 > 2021.10.02: 新增消息推送功能——微信Server酱
+>
+> 2021.12.07: 新增多人打卡功能
+>
+> **2021.12.22**: :warning: **[重要更新]** 更改了登录逻辑，**当前GithubAction无法使用**！！！服务器等手段仍然可用，请使用最新版。
 
 🤺妈妈再也不用担心我团课没看被团支书赶着催了
 
@@ -99,6 +103,8 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 2. 在本地 `config.json` 上配置
 
    参考 [config.json.bak](./config.json.bak) 的内容添加新的配置，原配置不需要改动
+
+~~请让你的小伙伴也来点个Star吧~~
 
 ## 赏我一杯Coffee
 
