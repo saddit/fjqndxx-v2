@@ -90,7 +90,7 @@ def post_login(username: str, pwd: str, validate_code, pub_key):
     post_dict = {
         'userName': encryptor.encrypt(username, pub_key),
         'pwd': encryptor.encrypt(pwd, pub_key),
-        'validateCode': encryptor.encrypt(validate_code, pub_key)
+        'validateCode': validate_code
     }
 
     resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
