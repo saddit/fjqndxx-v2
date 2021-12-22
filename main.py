@@ -276,7 +276,12 @@ def run(use_config: bool):
 def start_with_workflow():
     init_logger()
     logging.info("你正在使用GitHubAction,请确保secret已经配置")
-    run(False)
+    # run(False)
+    resp = sess.get(url="https://m.fjcyl.com")
+    if resp.ok:
+        logging.info("ping m.fjcyl.com ok")
+    else:
+        logging.info("ping m.fjcyl.com error, resp="+resp.content)
 
 
 if __name__ == '__main__':
