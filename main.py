@@ -14,6 +14,12 @@ crypt_name = "sm4"
 crypt_mode = "ecb"
 
 sess = requests.session()
+sess.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+    "Host": "m.fjcyl.com",
+    "Referer": "https://m.fjcyl.com/login"
+})
+
 ocr_util = None
 encryptor = importlib.import_module(f"crypt_module.{crypt_name}.{crypt_name}_{crypt_mode}")
 send_util = {
