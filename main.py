@@ -19,6 +19,9 @@ sess.headers.update({
     "Host": "m.fjcyl.com",
     "Referer": "https://m.fjcyl.com/login"
 })
+sess.proxies = {
+    "https": "https://106.14.187.182:21673"
+}
 
 ocr_util = None
 encryptor = importlib.import_module(f"crypt_module.{crypt_name}.{crypt_name}_{crypt_mode}")
