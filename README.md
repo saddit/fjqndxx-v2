@@ -46,6 +46,8 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 
 #### 1. 部署在平台上定时执行
 
+目前可以考虑使用Gitee或者其他国内平台的CI
+
 可以是服务器，本地，和GitHubActions，这里只介绍如何在GitHubActions中运行，其他运行方式请参考main.py中的注释
 
 - fork该项目到你的库中
