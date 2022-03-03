@@ -1,6 +1,6 @@
 import requests
 
-from exception.exceptions import UnexpectedException
+from exception.exceptions import SendInitException
 
 sess = requests.session()
 send_key = ""
@@ -14,12 +14,12 @@ def set_key(key: str):
         send_url = url_key[0]
         send_key = url_key[1]
     else:
-        raise UnexpectedException("bark 推送需要配置 url#key 格式的send_key")
+        raise SendInitException("bark 推送需要配置 url#key 格式的send_key")
 
 
-def send(title, content) -> dict:
+def send(title: str, content: str) -> dict:
     content.replace("\n", "\n\n")
-    resp = sess.post(url=f"{send_url}/{send_key}/{title}/{content}")
+    resp = sess.post(url=f"{send_url}/{send_key}/{title.replace('*','').strip()}/{content.replace('*','').strip()}")
     success = resp.ok
     return {
         'success': success,

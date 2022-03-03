@@ -8,7 +8,7 @@ from functools import wraps
 
 import requests
 
-from exception.exceptions import KnownException
+from exception.exceptions import KnownException, SendInitException
 
 crypt_name = "sm4"
 crypt_mode = "ecb"
@@ -21,7 +21,8 @@ sess.headers.update({
 })
 
 ocr_util = None
-encryptor = importlib.import_module(f"crypt_module.{crypt_name}.{crypt_name}_{crypt_mode}")
+encryptor = importlib.import_module(
+    f"crypt_module.{crypt_name}.{crypt_name}_{crypt_mode}")
 send_util = {
     'enable': False,
     'mode': 'fail',
@@ -33,6 +34,11 @@ def catch_exception(func):
     def catch(*args, **kwargs):
         try:
             return func(*args, **kwargs)
+        except SendInitException as se:
+            send_util['enable'] = False
+            error_exit(f'{se}', False)
+        except KnownException as ke:
+            error_exit(f'{ke}', False)
         except BaseException as e:
             error_exit(f"请阅读异常提醒，如果无法解决请截图日志发issue)：{e}")
 
@@ -44,9 +50,12 @@ def init_logger():
     logging.basicConfig(format="[%(levelname)s]:%(message)s")
 
 
-def error_exit(msg: str):
+def error_exit(msg: str, trace=True):
     send_msg(content=msg, success=False)
-    logging.exception(f"异常信息: {msg}")
+    if trace:
+        logging.exception(f"异常信息: {msg}")
+    else:
+        logging.error(f"异常信息: {msg}")
     exit(-1)
 
 
@@ -58,7 +67,8 @@ def get_validate_code() -> str:
     max_try = 5
     has_try = 0
     while has_try < max_try:
-        resp = sess.get(url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
+        resp = sess.get(
+            url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
         try:
             # noinspection PyUnresolvedReferences
             res = ocr_util.get_result(base64.b64encode(resp.content))
@@ -117,8 +127,8 @@ def get_profile_from_config():
             send_key = send_config.get('key')
             send_mode = send_config.get('mode')
     return username, pwd, pub_key, \
-           api_key, secret_key, ocr_type, \
-           send_type, send_key, send_mode, accounts
+        api_key, secret_key, ocr_type, \
+        send_type, send_key, send_mode, accounts
 
 
 def get_profile_from_env():
@@ -146,8 +156,8 @@ def get_profile_from_env():
                 account['pwd'] = usr_split[1]
             accounts.append(account)
     return username, pwd, pub_key, \
-           api_key, secret_key, ocr_type, \
-           send_type, send_key, send_mode, accounts
+        api_key, secret_key, ocr_type, \
+        send_type, send_key, send_mode, accounts
 
 
 def login(username, pwd, pub_key):
@@ -177,7 +187,8 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
         ocr_type = "baidu_image"
 
     try:
-        ocr_util = importlib.import_module(f"ocr_module.{ocr_type}.{ocr_type}_ocr")
+        ocr_util = importlib.import_module(
+            f"ocr_module.{ocr_type}.{ocr_type}_ocr")
     except ModuleNotFoundError:
         error_exit("ocr类型不存在,请更换类型")
 
@@ -190,12 +201,13 @@ def init_sender(send_type, send_key, send_mode):
     if send_type is None or send_type == '':
         return
     if send_key is None or send_key == '':
-        error_exit('缺少配置信息: send_key')
+        raise SendInitException('缺少配置信息: send_key')
     else:
         try:
-            send_util['sender'] = importlib.import_module(f"send_module.{send_type}.sender")
+            send_util['sender'] = importlib.import_module(
+                f"send_module.{send_type}.sender")
         except ModuleNotFoundError:
-            error_exit("消息推送类型不存在，请更换类型")
+            raise SendInitException("消息推送类型不存在，请更换类型")
 
         send_util['enable'] = True
         send_util['sender'].set_key(send_key)
@@ -253,9 +265,9 @@ def run(use_config: bool):
     logging.info("自动学习开始")
     # get default config
     username, pwd, pub_key, \
-    api_key, secret_key, ocr_type, \
-    send_type, send_key, send_mode, \
-    accounts = get_profile_from_config() if use_config else get_profile_from_env()
+        api_key, secret_key, ocr_type, \
+        send_type, send_key, send_mode, \
+        accounts = get_profile_from_config() if use_config else get_profile_from_env()
     # init ocr module
     init_ocr(ocr_type, api_key, secret_key)
     # init sender
