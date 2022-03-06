@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import time
+import ssl
 from functools import wraps
 
 import requests
@@ -289,7 +290,12 @@ def init_proxy():
         ip = proxy.random_pop()
         sess.proxies = {'https': f"http://{ip}"}
         try:
-            sess.get("https://m.fjcyl.com")
+            try:
+                sess.get("https://m.fjcyl.com")
+            except ssl.SSLError:
+                sess.proxies = {'https': f"https://{ip}"}
+                sess.get("https://m.fjcyl.com")
+
             logging.info(f"使用{ip}代理")
             return
         except requests.exceptions.ProxyError:
