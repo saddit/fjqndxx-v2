@@ -1,14 +1,15 @@
 import base64
-import logging
-import json
-import os
 import importlib
+import json
+import logging
+import os
 import time
 from functools import wraps
 
 import requests
 
-from exception.exceptions import KnownException, SendInitException
+from exception import KnownException, SendInitException
+from proxy_module.proxy_fetcher import ProxyFecher
 
 crypt_name = "sm4"
 crypt_mode = "ecb"
@@ -281,10 +282,25 @@ def run(use_config: bool):
         single_study(username, pwd, pub_key)
 
 
+def init_proxy():
+    logging.info("正在尝试使用代理IP")
+    proxy = ProxyFecher()
+    while not proxy.empty():
+        ip = proxy.random_pop()
+        sess.proxies = {'https': f"http://{ip}"}
+        try:
+            sess.get("https://m.fjcyl.com")
+            logging.info(f"使用{ip}代理")
+            return
+        except requests.exceptions.ProxyError:
+            logging.info(f"{ip} 不可用")
+    error_exit("找不到可用代理IP", False)
+
+
 def start_with_workflow():
     init_logger()
     logging.info("你正在使用GitHubAction,请确保secret已经配置")
-    logging.warn("GithubAction 目前可能无法使用，请暂时更换平台")
+    init_proxy()
     run(False)
 
 
