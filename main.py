@@ -1,35 +1,33 @@
 import base64
-import logging
-import json
-import os
 import importlib
+import json
+import logging
+import os
 import time
 from functools import wraps
 
 import requests
 
-from exception.exceptions import KnownException
+from exception import KnownException, SendInitException
+from proxy_module.proxy_fetcher import ProxyFecher
 
 crypt_name = "sm4"
 crypt_mode = "ecb"
 
 sess = requests.session()
+sess.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+    "Host": "m.fjcyl.com",
+    "Referer": "https://m.fjcyl.com/login"
+})
+
 ocr_util = None
-encryptor = importlib.import_module(f"crypt_module.{crypt_name}.{crypt_name}_{crypt_mode}")
+encryptor = importlib.import_module(
+    f"crypt_module.{crypt_name}.{crypt_name}_{crypt_mode}")
 send_util = {
     'enable': False,
     'mode': 'fail',
 }
-
-"""
-脚本识别验证码使用的是百度的api，使用前请先申请百度ocr的key！或者更改baidu_image/ocr.py中的代码来使用你所知道的api
-运行方法：
-    1. 直接运行main.py
-        将config.json.bak更名为config.json, 填写config数据为你自己的数据，然后直接运行即可
-    2. 通过GitHubAction等自动化工具
-        不运行此脚本，运行workflow.py, 以GithubAction为例，你需要添加五个secrets，分别为
-        username, pwd, pub_key, ocr_api_key, ocr_secret_key
-"""
 
 
 def catch_exception(func):
@@ -37,6 +35,11 @@ def catch_exception(func):
     def catch(*args, **kwargs):
         try:
             return func(*args, **kwargs)
+        except SendInitException as se:
+            send_util['enable'] = False
+            error_exit(f'{se}', False)
+        except KnownException as ke:
+            error_exit(f'{ke}', False)
         except BaseException as e:
             error_exit(f"请阅读异常提醒，如果无法解决请截图日志发issue)：{e}")
 
@@ -48,9 +51,12 @@ def init_logger():
     logging.basicConfig(format="[%(levelname)s]:%(message)s")
 
 
-def error_exit(msg: str):
+def error_exit(msg: str, trace=True):
     send_msg(content=msg, success=False)
-    logging.exception(f"异常信息: {msg}")
+    if trace:
+        logging.exception(f"异常信息: {msg}")
+    else:
+        logging.error(f"异常信息: {msg}")
     exit(-1)
 
 
@@ -62,7 +68,8 @@ def get_validate_code() -> str:
     max_try = 5
     has_try = 0
     while has_try < max_try:
-        resp = sess.get(url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
+        resp = sess.get(
+            url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
         try:
             # noinspection PyUnresolvedReferences
             res = ocr_util.get_result(base64.b64encode(resp.content))
@@ -121,8 +128,8 @@ def get_profile_from_config():
             send_key = send_config.get('key')
             send_mode = send_config.get('mode')
     return username, pwd, pub_key, \
-           api_key, secret_key, ocr_type, \
-           send_type, send_key, send_mode, accounts
+        api_key, secret_key, ocr_type, \
+        send_type, send_key, send_mode, accounts
 
 
 def get_profile_from_env():
@@ -150,8 +157,8 @@ def get_profile_from_env():
                 account['pwd'] = usr_split[1]
             accounts.append(account)
     return username, pwd, pub_key, \
-           api_key, secret_key, ocr_type, \
-           send_type, send_key, send_mode, accounts
+        api_key, secret_key, ocr_type, \
+        send_type, send_key, send_mode, accounts
 
 
 def login(username, pwd, pub_key):
@@ -181,7 +188,8 @@ def init_ocr(ocr_type: str, ak: str, sk: str):
         ocr_type = "baidu_image"
 
     try:
-        ocr_util = importlib.import_module(f"ocr_module.{ocr_type}.{ocr_type}_ocr")
+        ocr_util = importlib.import_module(
+            f"ocr_module.{ocr_type}.{ocr_type}_ocr")
     except ModuleNotFoundError:
         error_exit("ocr类型不存在,请更换类型")
 
@@ -194,12 +202,13 @@ def init_sender(send_type, send_key, send_mode):
     if send_type is None or send_type == '':
         return
     if send_key is None or send_key == '':
-        error_exit('缺少配置信息: send_key')
+        raise SendInitException('缺少配置信息: send_key')
     else:
         try:
-            send_util['sender'] = importlib.import_module(f"send_module.{send_type}.sender")
+            send_util['sender'] = importlib.import_module(
+                f"send_module.{send_type}.sender")
         except ModuleNotFoundError:
-            error_exit("消息推送类型不存在，请更换类型")
+            raise SendInitException("消息推送类型不存在，请更换类型")
 
         send_util['enable'] = True
         send_util['sender'].set_key(send_key)
@@ -257,9 +266,9 @@ def run(use_config: bool):
     logging.info("自动学习开始")
     # get default config
     username, pwd, pub_key, \
-    api_key, secret_key, ocr_type, \
-    send_type, send_key, send_mode, \
-    accounts = get_profile_from_config() if use_config else get_profile_from_env()
+        api_key, secret_key, ocr_type, \
+        send_type, send_key, send_mode, \
+        accounts = get_profile_from_config() if use_config else get_profile_from_env()
     # init ocr module
     init_ocr(ocr_type, api_key, secret_key)
     # init sender
@@ -273,9 +282,25 @@ def run(use_config: bool):
         single_study(username, pwd, pub_key)
 
 
+def init_proxy():
+    logging.info("正在尝试使用代理IP")
+    proxy = ProxyFecher()
+    while not proxy.empty():
+        ip = proxy.random_pop()
+        sess.proxies = {'https': f"http://{ip}"}
+        try:
+            sess.get("https://m.fjcyl.com")
+            logging.info(f"使用{ip}代理")
+            return
+        except requests.exceptions.ProxyError:
+            logging.info(f"{ip} 不可用")
+    error_exit("找不到可用代理IP", False)
+
+
 def start_with_workflow():
     init_logger()
     logging.info("你正在使用GitHubAction,请确保secret已经配置")
+    init_proxy()
     run(False)
 
 

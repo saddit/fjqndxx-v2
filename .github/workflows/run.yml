@@ -15,16 +15,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install Python
-      run: |
-        sudo apt update && \
-        sudo apt install python3
-    
-    - name: Pip requirements
-      run:
-        pip3 install requests pycryptodome gmssl
+    - name: Set up python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+
+    - name: Install requirements
+      run: pip install -r requirements.txt
          
-    - name: auto study
+    - name: Auto study
       env:
         username: ${{secrets.USERNAME}}
         password: ${{secrets.PWD}}
