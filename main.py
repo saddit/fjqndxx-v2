@@ -16,6 +16,7 @@ crypt_name = "sm4"
 crypt_mode = "ecb"
 
 sess = requests.session()
+sess.verify = False
 sess.headers.update({
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
     "Host": "m.fjcyl.com",
@@ -292,7 +293,7 @@ def init_proxy():
         try:
             try:
                 sess.get("https://m.fjcyl.com")
-            except ssl.SSLError:
+            except ssl.SSLError or requests.exceptions.SSLError:
                 sess.proxies = {'https': f"https://{ip}"}
                 sess.get("https://m.fjcyl.com")
 
