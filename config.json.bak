@@ -6,7 +6,7 @@
     "private": "此处不用填写"
   },
   "ocr": {
-    "type": "默认为baidu_image",
+    "type": "目前不需要填写ocr了",
     "sk": "填写baidu ocr的 SecretKey",
     "ak": "填写ApiKey"
   },

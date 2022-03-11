@@ -7,11 +7,11 @@ from .proxy import fetchers
 class ProxyFecher(object):
 
     cache_hosts: list[str]
-    fetched: bool
+    fetched: int
 
     def __init__(self):
         self.cache_hosts: list[str] = []
-        self.fetched = False
+        self.fetched = 0
         with open('proxies.txt', 'w+', encoding='utf-8') as host_file:
             self.cache_hosts = host_file.readlines()
 
@@ -22,17 +22,16 @@ class ProxyFecher(object):
         return self.cache_hosts.pop(idx)
 
     def empty(self) -> bool:
-        return len(self.cache_hosts) == 0 and self.fetched
+        return len(self.cache_hosts) == 0 and self.fetched == len(fetchers)
 
     def fetch_new_hosts(self):
-        if self.fetched:
+        if self.fetched == len(fetchers):
             raise KnownException('已经更新过IP')
         logging.info("正在获取最新代理IP")
         self.cache_hosts.clear()
         with open("proxies.txt", 'w+', encoding='utf-8') as host_file:
-            idx = random.randint(0, len(self.cache_hosts))
-            fetcher = fetchers[idx]
+            fetcher = fetchers[self.fetched]
             for host in fetcher():
                 self.cache_hosts.append(host)
                 host_file.write(host+'\n')
-        self.fetched = True
+        self.fetched += 1
