@@ -292,14 +292,16 @@ def init_proxy():
         sess.proxies = {'https': f"http://{ip}"}
         try:
             try:
+                logging.info(f"正在测试 http://{ip}")
                 sess.get("https://m.fjcyl.com")
-            except ssl.SSLError or ssl.SSLEOFError or requests.exceptions.SSLError:
+            except BaseException:
+                logging.info(f"正在测试 https://{ip}")
                 sess.proxies = {'https': f"https://{ip}"}
                 sess.get("https://m.fjcyl.com")
 
-            logging.info(f"使用{ip}代理")
+            logging.info(f"测试成功，使用{ip}代理请求")
             return
-        except ssl.SSLError or ssl.SSLEOFError or requests.exceptions.ProxyError or requests.exceptions.SSLError:
+        except BaseException:
             logging.info(f"{ip} 不可用")
     error_exit("找不到可用代理IP", False)
 
@@ -314,4 +316,5 @@ def start_with_workflow():
 if __name__ == '__main__':
     init_logger()
     logging.info("你正在使用本地服务,请确保填写了配置文件")
+    init_proxy()
     run(True)

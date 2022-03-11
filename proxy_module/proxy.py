@@ -24,7 +24,34 @@ def freeProxy10():
         yield ':'.join(proxy)
 
 
+def freeProxy08():
+    """ 小幻代理 """
+    urls = ['https://ip.ihuan.me/address/5Lit5Zu9.html']
+    for url in urls:
+        r = requests.get(url, timeout=10)
+        proxies = re.findall(
+            r'>\s*?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*?</a></td><td>(\d+)</td>', r.text)
+        for proxy in proxies:
+            yield ":".join(proxy)
+
+
+def freeProxy02():
+    """
+    代理66 http://www.66ip.cn/
+    :return:
+    """
+    url = "http://www.66ip.cn/mo.php"
+
+    resp = requests.get(url, timeout=10)
+    proxies = re.findall(
+        r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5})', resp.text)
+    for proxy in proxies:
+        yield proxy
+
+
 fetchers = [
-    freeProxy04,
+    freeProxy08,
+    freeProxy02,
     freeProxy10,
+    freeProxy04,
 ]
