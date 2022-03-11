@@ -65,25 +65,25 @@ def error_raise(msg: str):
     raise KnownException(msg)
 
 
-def get_validate_code() -> str:
-    max_try = 5
-    has_try = 0
-    while has_try < max_try:
-        resp = sess.get(
-            url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
-        try:
-            # noinspection PyUnresolvedReferences
-            res = ocr_util.get_result(base64.b64encode(resp.content))
-            logging.info('获取验证码成功')
-            return res
-        except Exception as e:
-            logging.warning(f'获取验证码失败，原因:{e}')
-            logging.warning(f'正在重试, 次数:{has_try}')
-            has_try += 1
-            time.sleep(1)
+# def get_validate_code() -> str:
+#     max_try = 5
+#     has_try = 0
+#     while has_try < max_try:
+#         resp = sess.get(
+#             url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
+#         try:
+#             # noinspection PyUnresolvedReferences
+#             res = ocr_util.get_result(base64.b64encode(resp.content))
+#             logging.info('获取验证码成功')
+#             return res
+#         except Exception as e:
+#             logging.warning(f'获取验证码失败，原因:{e}')
+#             logging.warning(f'正在重试, 次数:{has_try}')
+#             has_try += 1
+#             time.sleep(1)
 
-    if has_try == max_try:
-        error_raise("验证码解析失败,请尝试更换方式或发issue寻求帮助")
+#     if has_try == max_try:
+#         error_raise("验证码解析失败,请尝试更换方式或发issue寻求帮助")
 
 
 def post_study_record():
@@ -94,11 +94,11 @@ def post_study_record():
         error_raise("学习失败")
 
 
-def post_login(username: str, pwd: str, validate_code, pub_key):
+def post_login(username: str, pwd: str, pub_key):
     post_dict = {
         'userName': encryptor.encrypt(username, pub_key),
         'pwd': encryptor.encrypt(pwd, pub_key),
-        'validateCode': validate_code
+        # 'validateCode': validate_code
     }
 
     resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
@@ -167,11 +167,11 @@ def login(username, pwd, pub_key):
     has_try = 0
     logging.info(f"正在登录尾号{username[-4:]}")
     while has_try < max_try:
-        # get validate code
-        code = get_validate_code()
+        # get validate code 经测试不需要验证码
+        # code = get_validate_code()
         # do login
         try:
-            post_login(username, pwd, code, pub_key)
+            post_login(username, pwd, pub_key)
             break
         except ConnectionError as e:
             logging.error(f'尾号{username[-4:]}登录失败，原因:{e}')
@@ -183,20 +183,20 @@ def login(username, pwd, pub_key):
         error_raise(f"尾号{username[-4:]}尝试登录失败")
 
 
-def init_ocr(ocr_type: str, ak: str, sk: str):
-    global ocr_util
-    if ocr_type is None or ocr_type == '':
-        ocr_type = "baidu_image"
+# def init_ocr(ocr_type: str, ak: str, sk: str):
+#     global ocr_util
+#     if ocr_type is None or ocr_type == '':
+#         ocr_type = "baidu_image"
 
-    try:
-        ocr_util = importlib.import_module(
-            f"ocr_module.{ocr_type}.{ocr_type}_ocr")
-    except ModuleNotFoundError:
-        error_exit("ocr类型不存在,请更换类型")
+#     try:
+#         ocr_util = importlib.import_module(
+#             f"ocr_module.{ocr_type}.{ocr_type}_ocr")
+#     except ModuleNotFoundError:
+#         error_exit("ocr类型不存在,请更换类型")
 
-    if ocr_util.is_need_keys():
-        ocr_util.set_keys(ak, sk)
-    logging.info(f"使用 OCR {ocr_type}")
+#     if ocr_util.is_need_keys():
+#         ocr_util.set_keys(ak, sk)
+#     logging.info(f"使用 OCR {ocr_type}")
 
 
 def init_sender(send_type, send_key, send_mode):
@@ -270,8 +270,8 @@ def run(use_config: bool):
         api_key, secret_key, ocr_type, \
         send_type, send_key, send_mode, \
         accounts = get_profile_from_config() if use_config else get_profile_from_env()
-    # init ocr module
-    init_ocr(ocr_type, api_key, secret_key)
+    # init ocr module 不需要 ocr 了
+    # init_ocr(ocr_type, api_key, secret_key)
     # init sender
     init_sender(send_type, send_key, send_mode)
     # study proc
