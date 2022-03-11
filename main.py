@@ -293,13 +293,13 @@ def init_proxy():
         try:
             try:
                 sess.get("https://m.fjcyl.com")
-            except ssl.SSLError or requests.exceptions.SSLError:
+            except ssl.SSLError or ssl.SSLEOFError or requests.exceptions.SSLError:
                 sess.proxies = {'https': f"https://{ip}"}
                 sess.get("https://m.fjcyl.com")
 
             logging.info(f"使用{ip}代理")
             return
-        except requests.exceptions.ProxyError:
+        except ssl.SSLError or ssl.SSLEOFError or requests.exceptions.ProxyError or requests.exceptions.SSLError:
             logging.info(f"{ip} 不可用")
     error_exit("找不到可用代理IP", False)
 
