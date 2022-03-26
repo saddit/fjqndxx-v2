@@ -5,11 +5,6 @@
     "public": "填入公钥",
     "private": "此处不用填写"
   },
-  "ocr": {
-    "type": "目前不需要填写ocr了",
-    "sk": "填写baidu ocr的 SecretKey",
-    "ak": "填写ApiKey"
-  },
   "send": {
     "type": "不填写则不开启",
     "key": "填写server酱或其他的SendKey",
