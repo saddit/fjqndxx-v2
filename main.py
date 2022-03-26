@@ -8,6 +8,8 @@ import ssl
 from functools import wraps
 
 import requests
+# 处理https警告
+requests.packages.urllib3.disable_warnings()
 
 from exception import KnownException, SendInitException
 from proxy_module.proxy_fetcher import ProxyFecher
@@ -16,6 +18,7 @@ crypt_name = "sm4"
 crypt_mode = "ecb"
 
 sess = requests.session()
+
 sess.verify = False
 sess.headers.update({
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
@@ -120,9 +123,16 @@ def get_profile_from_config():
         username = config_json.get('username')
         pwd = config_json.get('pwd')
         pub_key = config_json.get('rsaKey').get('public')
-        api_key = config_json.get('ocr').get('ak')
-        secret_key = config_json.get('ocr').get('sk')
-        ocr_type = config_json.get('ocr').get('type')
+        ocr_config = config_json.get('ocr')
+        if ocr_config is not None:
+        	api_key = config_json.get('ocr').get('ak')
+        	secret_key = config_json.get('ocr').get('sk')
+        	ocr_type = config_json.get('ocr').get('type')
+        else:
+        	api_key = ''
+        	secret_key = ''
+        	ocr_type = ''
+        	
         send_config = config_json.get('send')
         accounts = config_json.get("extUsers")
         if send_config is not None:
@@ -316,5 +326,5 @@ def start_with_workflow():
 if __name__ == '__main__':
     init_logger()
     logging.info("你正在使用本地服务,请确保填写了配置文件")
-    init_proxy()
+    #init_proxy()
     run(True)
