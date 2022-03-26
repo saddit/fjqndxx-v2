@@ -79,7 +79,7 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 
 | 配置项    | 说明                                                         | 可选值                                        |
 | --------- | ------------------------------------------------------------ | --------------------------------------------- |
-| send_type | 消息推送类型 **不填写则不推送**                              | [server_chan](./doc/send_help/server_chan.md) [bark(Beta)](./doc/send_help/bark.md) |
+| send_type | 消息推送类型 **不填写则不推送**                              | [server_chan](./doc/send_help/server_chan.md) [bark(Beta)](./doc/send_help/bark.md) [push_plus](./doc/send_help/push_plus.md) |
 | send_key  | 消息推送服务的密钥 在推送服务的官网注册获得                  |                                               |
 | send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                             |
 
