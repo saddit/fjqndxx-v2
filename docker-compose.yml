@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  tk-auto-study:
+    build: .
+    restart: always
+    environment:
+      - CRONTIME="0 9 * * 1,4"
+      - username=
+      - password=
+      - pubKey=A7E74D2B6282AEB1C5EA3C28D25660A7
+      - sendType=server_chan
+      - sendKey=
+      - sendMode=both
+      - extUsers=
