@@ -2,8 +2,7 @@
   "username": "引号内填入你的用户名",
   "pwd": "填入密码",
   "rsaKey": {
-    "public": "填入公钥",
-    "private": "此处不用填写"
+    "public": "填入公钥"
   },
   "send": {
     "type": "不填写则不开启",
