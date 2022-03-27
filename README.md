@@ -2,17 +2,15 @@
 
 ![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.9-green.svg)
 
-[此处展示重要更新日志，完整日志搓这里](./doc/Log.md)
+[此处展示最近更新日志，完整日志搓这里](./doc/Log.md)
 
-> 2021.10.02: 新增消息推送功能——微信Server酱
->
-> 2021.12.07: 新增多人打卡功能
->
 > **2022.03.06**: :warning: **[重要更新]** 新学期新气象，GithubAction已经可用使用了！！新增Bark消息推送模式（beta) 
 >
 > 2022.03.11: 经用户反馈，去除了OCR功能模块，现在不需要申请OCR账号，添加了更多代理源 改善代理异常的处理 提高可用性
 >
 > 2022.03.26: 感谢 @miscdec 对开源库的贡献，现在添加了push_plus推送渠道，并修复了一些异常。
+>
+> 2022.03.27: 代理池极不稳定
 
 🤺妈妈再也不用担心我团课没看被团支书赶着催了
 
