@@ -1,3 +1,5 @@
+from proxy_module.proxy_fetcher import ProxyFecher
+from exception import KnownException, SendInitException
 import importlib
 import json
 import logging
@@ -9,8 +11,6 @@ import requests
 # 处理https警告
 requests.packages.urllib3.disable_warnings()
 
-from exception import KnownException, SendInitException
-from proxy_module.proxy_fetcher import ProxyFecher
 
 crypt_name = "sm4"
 crypt_mode = "ecb"
@@ -279,18 +279,13 @@ def init_proxy():
         ip = proxy.random_pop()
         sess.proxies = {'https': f"http://{ip}"}
         try:
-            try:
-                logging.info(f"正在测试 http://{ip}")
-                sess.get("https://m.fjcyl.com", timeout=10)
-            except BaseException:
-                logging.info(f"正在测试 https://{ip}")
-                sess.proxies = {'https': f"https://{ip}"}
-                sess.get("https://m.fjcyl.com", timeout=10)
+            logging.info(f"正在测试 http://{ip}")
+            sess.get("https://m.fjcyl.com", timeout=10)
 
             logging.info(f"测试成功，使用{ip}代理请求")
             return
-        except BaseException:
-            logging.info(f"{ip} 不可用")
+        except BaseException as e:
+            logging.info(f"{ip} 不可用, {e}")
     error_exit("找不到可用代理IP", False)
 
 

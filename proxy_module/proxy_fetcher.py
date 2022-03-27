@@ -16,7 +16,7 @@ class ProxyFecher(object):
     def random_pop(self) -> str:
         if self.cache_hosts.__len__() == 0:
             self.fetch_new_hosts()
-        idx = random.randint(0, len(self.cache_hosts))
+        idx = random.randint(0, len(self.cache_hosts) - 1)
         return self.cache_hosts.pop(idx)
 
     def empty(self) -> bool:

@@ -15,24 +15,17 @@ def freeProxy04():
 
 def freeProxy10():
     """ 89免费代理 """
-    r = requests.get("https://www.89ip.cn/index_1.html",
-                     timeout=10, verify=False)
-    proxies = re.findall(
-        r'<td.*?>[\s\S]*?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})[\s\S]*?</td>[\s\S]*?<td.*?>[\s\S]*?(\d+)[\s\S]*?</td>',
-        r.text)
-    for proxy in proxies:
-        yield ':'.join(proxy)
-
-
-def freeProxy08():
-    """ 小幻代理 """
-    urls = ['https://ip.ihuan.me/address/5Lit5Zu9.html']
+    urls = ["https://www.89ip.cn/index_1.html",
+            "https://www.89ip.cn/index_2.html",
+            "https://www.89ip.cn/index_3.html"]
     for url in urls:
-        r = requests.get(url, timeout=10)
+        r = requests.get(url,
+                         timeout=10, verify=False)
         proxies = re.findall(
-            r'>\s*?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*?</a></td><td>(\d+)</td>', r.text)
+            r'<td.*?>[\s\S]*?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})[\s\S]*?</td>[\s\S]*?<td.*?>[\s\S]*?(\d+)[\s\S]*?</td>',
+            r.text)
         for proxy in proxies:
-            yield ":".join(proxy)
+            yield ':'.join(proxy)
 
 
 def freeProxy02():
@@ -49,8 +42,21 @@ def freeProxy02():
         yield proxy
 
 
+def freeProxy03():
+    """ 开心代理 """
+    target_urls = ["http://www.kxdaili.com/dailiip.html",
+                   "http://www.kxdaili.com/dailiip/2/1.html"]
+    for url in target_urls:
+        tree = requests.get(url, timeout=10).tree
+        for tr in tree.xpath("//table[@class='active']//tr")[1:]:
+            ip = "".join(tr.xpath('./td[1]/text()')).strip()
+            port = "".join(tr.xpath('./td[2]/text()')).strip()
+            yield "%s:%s" % (ip, port)
+
+
 fetchers = [
-    freeProxy02,
     freeProxy10,
     freeProxy04,
+    freeProxy02,
+    freeProxy03,
 ]
