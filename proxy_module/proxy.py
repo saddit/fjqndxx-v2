@@ -6,7 +6,7 @@ from lxml import etree
 def freeProxy04():
     """ 蝶鸟IP """
     url = "https://www.dieniao.com/FreeProxy.html"
-    tree = etree.HTML(requests.get(url, verify=False).content)
+    tree = etree.HTML(requests.get(url, verify=False, timeout=10).content)
     for li in tree.xpath("//div[@class='free-main col-lg-12 col-md-12 col-sm-12 col-xs-12']/ul/li")[1:]:
         ip = "".join(li.xpath('./span[1]/text()')).strip()
         port = "".join(li.xpath('./span[2]/text()')).strip()
