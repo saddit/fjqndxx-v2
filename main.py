@@ -1,3 +1,5 @@
+from proxy_module.proxy_fetcher import ProxyFecher
+from exception import KnownException, SendInitException
 import importlib
 import json
 import logging
@@ -9,8 +11,6 @@ import requests
 # 处理https警告
 requests.packages.urllib3.disable_warnings()
 
-from exception import KnownException, SendInitException
-from proxy_module.proxy_fetcher import ProxyFecher
 
 crypt_name = "sm4"
 crypt_mode = "ecb"
@@ -255,7 +255,7 @@ def single_study(username, password, pub_key):
 
 
 @catch_exception
-def run(use_config: bool):
+def run(use_config: bool, use_proxy: bool = False):
     logging.info("自动学习开始")
     # get default config
     username, pwd, pub_key, \
@@ -263,6 +263,9 @@ def run(use_config: bool):
         accounts = get_profile_from_config() if use_config else get_profile_from_env()
     # init sender
     init_sender(send_type, send_key, send_mode)
+    # init proxy
+    if use_proxy:
+        init_proxy()
     # study proc
     if accounts is not None and len(accounts) > 0:
         if pwd is not None and username is not None and pwd != "" and username != "":
@@ -279,26 +282,20 @@ def init_proxy():
         ip = proxy.random_pop()
         sess.proxies = {'https': f"http://{ip}"}
         try:
-            try:
-                logging.info(f"正在测试 http://{ip}")
-                sess.get("https://m.fjcyl.com", timeout=10)
-            except BaseException:
-                logging.info(f"正在测试 https://{ip}")
-                sess.proxies = {'https': f"https://{ip}"}
-                sess.get("https://m.fjcyl.com", timeout=10)
+            logging.info(f"正在测试 http://{ip}")
+            sess.get("https://m.fjcyl.com", timeout=10)
 
             logging.info(f"测试成功，使用{ip}代理请求")
             return
-        except BaseException:
-            logging.info(f"{ip} 不可用")
-    error_exit("找不到可用代理IP", False)
+        except BaseException as e:
+            logging.info(f"{ip} 不可用, {e}")
+    error_raise("找不到可用代理IP")
 
 
 def start_with_workflow():
     init_logger()
     logging.info("你正在使用GitHubAction,请确保secret已经配置")
-    init_proxy()
-    run(False)
+    run(False, True)
 
 
 if __name__ == '__main__':
