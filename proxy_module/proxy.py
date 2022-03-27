@@ -55,8 +55,8 @@ def freeProxy03():
 
 
 fetchers = [
+    freeProxy02,
     freeProxy10,
     freeProxy04,
-    freeProxy02,
     freeProxy03,
 ]

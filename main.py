@@ -255,7 +255,7 @@ def single_study(username, password, pub_key):
 
 
 @catch_exception
-def run(use_config: bool):
+def run(use_config: bool, use_proxy: bool = False):
     logging.info("自动学习开始")
     # get default config
     username, pwd, pub_key, \
@@ -263,6 +263,9 @@ def run(use_config: bool):
         accounts = get_profile_from_config() if use_config else get_profile_from_env()
     # init sender
     init_sender(send_type, send_key, send_mode)
+    # init proxy
+    if use_proxy:
+        init_proxy()
     # study proc
     if accounts is not None and len(accounts) > 0:
         if pwd is not None and username is not None and pwd != "" and username != "":
@@ -286,14 +289,13 @@ def init_proxy():
             return
         except BaseException as e:
             logging.info(f"{ip} 不可用, {e}")
-    error_exit("找不到可用代理IP", False)
+    error_raise("找不到可用代理IP")
 
 
 def start_with_workflow():
     init_logger()
     logging.info("你正在使用GitHubAction,请确保secret已经配置")
-    init_proxy()
-    run(False)
+    run(False, True)
 
 
 if __name__ == '__main__':
