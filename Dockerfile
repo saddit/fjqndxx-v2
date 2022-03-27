@@ -1,12 +1,15 @@
 FROM python:3.7.13-alpine
 
+# run on evety Monday,Tuesday at 9:00
 ENV CRONTIME="0 9 * * 1,4"
 ENV username=
 ENV password=
 ENV pubKey=A7E74D2B6282AEB1C5EA3C28D25660A7
-ENV sendType=server_chan
+# bark, plus-plus, server_chan
+ENV sendType=
 ENV sendKey=
-ENV sendMode=both
+# success, fail, both
+ENV sendMode=
 ENV extUsers=
 
 RUN apk update; \
