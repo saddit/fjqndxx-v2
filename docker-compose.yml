@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  tk-auto-study:
+    build: .
+    restart: always
+    environment:
+    # run on evety Monday,Tuesday at 9:00
+      - CRONTIME="0 9 * * 1,4"
+      - username=
+      - password=
+      - pubKey=A7E74D2B6282AEB1C5EA3C28D25660A7
+      # bark, plus-plus, server_chan
+      - sendType=
+      - sendKey=
+      # success, fail, both
+      - sendMode=
+      - extUsers=
