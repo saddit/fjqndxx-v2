@@ -45,7 +45,7 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
   
   ![image](https://user-images.githubusercontent.com/55338151/161258385-eccd7f2f-8b7e-4002-aa8b-c436e96c01d7.png)
 
-> `1.2.8` 版本以上可以使用Docker脚本运行，使用环境变量配置参数（格式桶Actions)，可能无法配置多人打卡，可以尝试使用`\n`换行符（未测试）
+> `1.2.8` 版本以上可以使用Docker脚本运行，使用环境变量配置参数（格式同Actions)，可能无法配置多人打卡，可以尝试使用`\n`换行符（未测试）
 
 ## 可选消息推送
 
