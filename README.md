@@ -24,8 +24,6 @@
 
 ### 参与贡献！
 
-~~:pen:如果你有新的或更好OCR识别方式 请参考 [OCR贡献文档](./doc/OCR_Module_Rule.md) 做出你的贡献！~~
-
 :pen: 如果你有新的或更好消息推送方式 请参考 [消息推送贡献文档](./doc/send_module_rule.md) 做出你的贡献！
 
 ## 使用方法
@@ -41,11 +39,13 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 可以是服务器，本地，和GitHubActions，这里只介绍如何在GitHubActions中运行，其他运行方式请参考main.py中的注释
 
 - fork该项目到你的库中
-
 - 添加三个secrets，分别为：username,  pwd,  pub_key
+- **将.github/workflows/run.yml中的注释部分(`#`号)取消**并修改cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
+- 进入 Actions 中手动触发一次（点击auto-study 右边 Run workflow)，测试是否成功
+  
+  ![image](https://user-images.githubusercontent.com/55338151/161258385-eccd7f2f-8b7e-4002-aa8b-c436e96c01d7.png)
 
-- **将.github/workflows/run.yml中的注释部分(`#`号)取消**并cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
-- 进入Action中手动触发一次，测试是否成功
+> `1.2.7` 版本以上可以使用Docker脚本运行，使用环境变量配置参数（格式桶Actions)，可能无法配置多人打卡，可以尝试使用`\n`换行符（未测试）
 
 ## 可选消息推送
 
@@ -71,7 +71,7 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 
 > 仅支持 `1.2.3` 以上版本
 
-配置多个账号一起打卡 PS:目前在试验阶段 有问题请及时回馈
+配置多个账号一起打卡
 
 1. 在 `Github Action` 上配置
 
@@ -87,8 +87,6 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 2. 在本地 `config.json` 上配置
 
    参考 [config.json.bak](./config.json.bak) 的内容添加新的配置，原配置不需要改动
-
-~~请让你的小伙伴也来点个Star吧~~
 
 ## 赏我一杯Coffee
 
