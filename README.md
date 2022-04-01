@@ -39,8 +39,13 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 可以是服务器，本地，和GitHubActions，这里只介绍如何在GitHubActions中运行，其他运行方式请参考main.py中的注释
 
 - fork该项目到你的库中
+
 - 添加三个secrets，分别为：username,  pwd,  pub_key
-- **将.github/workflows/run.yml中的注释部分(`#`号)取消**并修改cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
+
+- 将[该文件](./.github/workflows/run.yml)中的`#`删除并修改cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
+ 
+  ![image](https://user-images.githubusercontent.com/55338151/161259594-21812419-25e3-4b1f-b64f-e06b826351b8.png)
+
 - 进入 Actions 中手动触发一次（点击auto-study 右边 Run workflow)，测试是否成功
   
   ![image](https://user-images.githubusercontent.com/55338151/161258385-eccd7f2f-8b7e-4002-aa8b-c436e96c01d7.png)
