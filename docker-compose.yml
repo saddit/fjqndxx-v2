@@ -16,3 +16,4 @@ services:
       # success, fail, both
       - sendMode=
       - extUsers=
+      - TZ=Asia/Shanghai

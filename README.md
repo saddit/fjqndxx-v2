@@ -11,6 +11,8 @@
 > 2022.03.26: 感谢 @miscdec 对开源库的贡献，现在添加了push_plus推送渠道，并修复了一些异常。
 >
 > 2022.03.27: 代理池极不稳定
+>
+> 2022.03.30: 感谢 @Dark-Existed 贡献了Docker部署脚本，请使用环境变量配置相关参数
 
 🤺妈妈再也不用担心我团课没看被团支书赶着催了
 
@@ -21,8 +23,6 @@
 ~~浙江团员可以点击这里[青春浙江](https://gist.github.com/838239178/ddad90e8c5e52f5fa8f0febea6109f24)~~
 
 ### 参与贡献！
-
-~~:pen:如果你有新的或更好OCR识别方式 请参考 [OCR贡献文档](./doc/OCR_Module_Rule.md) 做出你的贡献！~~
 
 :pen: 如果你有新的或更好消息推送方式 请参考 [消息推送贡献文档](./doc/send_module_rule.md) 做出你的贡献！
 
@@ -40,8 +40,16 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 
 - fork该项目到你的库中
 - 添加三个secrets，分别为：username,  pwd,  pub_key
-- **将.github/workflows/run.yml中的注释部分(`#`号)取消**并cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
-- 进入Action中手动触发一次，测试是否成功
+
+- 将[该文件](./.github/workflows/run.yml)中的`#`删除并修改cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
+ 
+  ![image](https://user-images.githubusercontent.com/55338151/161259594-21812419-25e3-4b1f-b64f-e06b826351b8.png)
+
+- 进入 Actions 中手动触发一次（点击auto-study 右边 Run workflow)，测试是否成功
+  
+  ![image](https://user-images.githubusercontent.com/55338151/161258385-eccd7f2f-8b7e-4002-aa8b-c436e96c01d7.png)
+
+> `1.2.8` 版本以上可以使用Docker脚本运行，使用环境变量配置参数（格式同Actions)，可能无法配置多人打卡，可以尝试使用`\n`换行符（未测试）
 
 ### 如何在服务器上部署
 
@@ -103,7 +111,7 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 
 > 仅支持 `1.2.3` 以上版本
 
-配置多个账号一起打卡 PS:目前在试验阶段 有问题请及时回馈
+配置多个账号一起打卡
 
 1. 在 `Github Action` 上配置
 
@@ -119,8 +127,6 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 2. 在本地 `config.json` 上配置
 
    参考 [config.json.bak](./config.json.bak) 的内容添加新的配置，原配置不需要改动
-
-~~请让你的小伙伴也来点个Star吧~~
 
 ## 赏我一杯Coffee
 
