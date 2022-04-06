@@ -39,11 +39,45 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 可以是服务器，本地，和GitHubActions，这里只介绍如何在GitHubActions中运行，其他运行方式请参考main.py中的注释
 
 - fork该项目到你的库中
-
 - 添加三个secrets，分别为：username,  pwd,  pub_key
-
 - **将.github/workflows/run.yml中的注释部分(`#`号)取消**并cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
 - 进入Action中手动触发一次，测试是否成功
+
+### 如何在服务器上部署
+
+#### crontab
+
+克隆项目并更改配置文件名称
+
+```shell
+git clone https://github.com/838239178/tk-auto-study.git && \
+cd tk-auto-study && \
+mv config.json.bak config.json && \
+```
+
+按照要求填写配置文件
+
+```shell
+vi config.json
+```
+
+修改 crontab
+
+```shell
+crontab -e
+# 将下面这行复制到里面，cd的路径按照需要更改
+00 08 * * 3 cd /root/tk-auto-study && python3 main.py >> crontab.log 2>&1
+```
+
+使用 `crontab -l` 查看是否修改成功
+
+#### docker
+
+除了crontab也可以使用目录下的`docker-compose.yml`，不需要填写 `config.json` 但需要修改文件内的`environments`
+
+```shell
+docker-compose up -d
+```
 
 ## 可选消息推送
 
