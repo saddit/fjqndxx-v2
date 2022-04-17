@@ -60,7 +60,7 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 ```shell
 git clone https://github.com/838239178/tk-auto-study.git && \
 cd tk-auto-study && \
-mv config.json.bak config.json && \
+mv config.json.bak config.json
 ```
 
 按照要求填写配置文件
