@@ -75,6 +75,8 @@ vi config.json
 crontab -e
 # 将下面这行复制到里面，cd的路径按照需要更改
 00 08 * * 3 cd /root/tk-auto-study && python3 main.py >> crontab.log 2>&1
+# 或者
+00 08 * * python3 /root/tk-auto-study/main.py >> crontab.log 2>&1
 ```
 
 使用 `crontab -l` 查看是否修改成功
