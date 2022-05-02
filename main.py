@@ -307,4 +307,4 @@ def start_with_workflow():
 if __name__ == '__main__':
     init_logger()
     logging.info("你正在使用本地服务,请确保填写了配置文件")
-    run(True, True)
+    run(True, False)
