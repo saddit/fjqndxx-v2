@@ -61,7 +61,7 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 ```shell
 git clone https://github.com/838239178/tk-auto-study.git && \
 cd tk-auto-study && \
-mv config.json.bak config.json && \
+mv config.json.bak config.json
 ```
 
 按照要求填写配置文件
@@ -76,6 +76,8 @@ vi config.json
 crontab -e
 # 将下面这行复制到里面，cd的路径按照需要更改
 00 08 * * 3 cd /root/tk-auto-study && python3 main.py >> crontab.log 2>&1
+# 或者
+00 08 * * python3 /root/tk-auto-study/main.py >> crontab.log 2>&1
 ```
 
 使用 `crontab -l` 查看是否修改成功
@@ -128,6 +130,10 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 2. 在本地 `config.json` 上配置
 
    参考 [config.json.bak](./config.json.bak) 的内容添加新的配置，原配置不需要改动
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/838239178/tk-auto-study.svg)](https://starchart.cc/838239178/tk-auto-study)
 
 ## 赏我一杯Coffee
 
