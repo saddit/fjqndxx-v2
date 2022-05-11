@@ -1,6 +1,6 @@
 # 青年大学习/团课自动打卡
 
-![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.9-green.svg)
+![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.7-green.svg)
 
 [此处展示最近更新日志，完整日志搓这里](./doc/Log.md)
 
@@ -36,7 +36,7 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 
 #### 部署在平台上定时执行
 
-可以是服务器，本地，和GitHubActions，这里只介绍如何在GitHubActions中运行，其他运行方式请参考main.py中的注释
+这里介绍如何在GitHubActions中运行，因代理IP的相关代码，需确保**Python3.9**及以上版本。
 
 - fork该项目到你的库中
 
@@ -53,6 +53,8 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 > `1.2.8` 版本以上可以使用Docker脚本运行，使用环境变量配置参数（格式同Actions)，可能无法配置多人打卡，可以尝试使用`\n`换行符（未测试）
 
 ### 如何在服务器上部署
+
+在本地或者国内服务器上部署不需要代理，可兼容**Python3.7**版本
 
 #### crontab
 
