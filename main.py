@@ -1,5 +1,3 @@
-from proxy_module.proxy_fetcher import ProxyFecher
-from exception import KnownException, SendInitException
 import importlib
 import json
 import logging
@@ -8,6 +6,9 @@ import time
 from functools import wraps
 
 import requests
+
+from exception import KnownException, SendInitException
+
 # 处理https警告
 requests.packages.urllib3.disable_warnings()
 
@@ -65,27 +66,6 @@ def error_exit(msg: str, trace=True):
 
 def error_raise(msg: str):
     raise KnownException(msg)
-
-
-# def get_validate_code() -> str:
-#     max_try = 5
-#     has_try = 0
-#     while has_try < max_try:
-#         resp = sess.get(
-#             url="https://m.fjcyl.com/validateCode?0.123123&width=58&height=19&num=4")
-#         try:
-#             # noinspection PyUnresolvedReferences
-#             res = ocr_util.get_result(base64.b64encode(resp.content))
-#             logging.info('获取验证码成功')
-#             return res
-#         except Exception as e:
-#             logging.warning(f'获取验证码失败，原因:{e}')
-#             logging.warning(f'正在重试, 次数:{has_try}')
-#             has_try += 1
-#             time.sleep(1)
-
-#     if has_try == max_try:
-#         error_raise("验证码解析失败,请尝试更换方式或发issue寻求帮助")
 
 
 def post_study_record():
@@ -175,22 +155,6 @@ def login(username, pwd, pub_key):
         error_raise(f"尾号{username[-4:]}尝试登录失败")
 
 
-# def init_ocr(ocr_type: str, ak: str, sk: str):
-#     global ocr_util
-#     if ocr_type is None or ocr_type == '':
-#         ocr_type = "baidu_image"
-
-#     try:
-#         ocr_util = importlib.import_module(
-#             f"ocr_module.{ocr_type}.{ocr_type}_ocr")
-#     except ModuleNotFoundError:
-#         error_exit("ocr类型不存在,请更换类型")
-
-#     if ocr_util.is_need_keys():
-#         ocr_util.set_keys(ak, sk)
-#     logging.info(f"使用 OCR {ocr_type}")
-
-
 def init_sender(send_type, send_key, send_mode):
     if send_type is None or send_type == '':
         return
@@ -216,8 +180,8 @@ def send_msg(content, success=True):
             or (send_util['mode'] == 'fail' and not success) \
             or (send_util['mode'] == 'success' and success):
         res = send_util['sender'].send(title="青年大学习打卡",
-                                       content=f"**状态：** {'成功' if success else '失败'}\n\n"
-                                               f"**信息：** {content}")
+                                       content=f"状态: {'成功' if success else '失败'}\n\n"
+                                               f"信息 {content}")
         if not res['success']:
             logging.warning(f"消息推送失败，原因：{res['message']}")
         else:
@@ -277,24 +241,22 @@ def run(use_config: bool, use_proxy: bool = False):
 
 def init_proxy():
     logging.info("正在尝试使用代理IP")
-    proxy = ProxyFecher()
+    module = importlib.import_module("proxy_module.proxy_fetcher")
+    proxy = module.ProxyFecher()
     while not proxy.empty():
-        ip = proxy.random_pop()
-        sess.proxies = {'https': f"http://{ip}"}
+        ip = f"http://{proxy.random_pop()}"
         try:
-            logging.info(f"正在测试 http://{ip}")
-            sess.get("https://m.fjcyl.com", timeout=15)
+            logging.info(f"正在测试 {ip}")
+            sess.get("https://fjcyl.com/",
+                         proxies={'https': ip}, timeout=8)
 
             logging.info(f"测试成功，使用{ip}代理请求")
+            sess.proxies = {"https": ip}
             return
         except BaseException as e:
             logging.info(f"{ip} 不可用, {e}")
     error_raise("找不到可用代理IP")
 
-def start_with_docker():
-    init_logger()
-    logging.info("你正在使用docker运行,请确保环境变量存在")
-    run(False, False)
 
 def start_with_docker():
     init_logger()
@@ -308,7 +270,11 @@ def start_with_workflow():
     run(False, True)
 
 
-if __name__ == '__main__':
+def start_local():
     init_logger()
     logging.info("你正在使用本地服务,请确保填写了配置文件")
     run(True, False)
+
+
+if __name__ == '__main__':
+    start_local()
