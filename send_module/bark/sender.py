@@ -6,7 +6,9 @@ sess = requests.session()
 send_key = ""
 send_url = ""
 
-
+"""
+设置密钥
+"""
 def set_key(key: str):
     global send_key, send_url
     url_key = key.split("#")

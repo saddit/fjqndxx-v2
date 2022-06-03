@@ -6,15 +6,16 @@ import time
 from functools import wraps
 
 import requests
+import urllib3
 
 from exception import KnownException, SendInitException
 
 # 处理https警告
-requests.packages.urllib3.disable_warnings()
+urllib3.disable_warnings()
 
 
-crypt_name = "sm4"
-crypt_mode = "ecb"
+CRYPT_NAME = "sm4"
+CRYPT_MODE = "ecb"
 
 sess = requests.session()
 
@@ -27,7 +28,7 @@ sess.headers.update({
 
 ocr_util = None
 encryptor = importlib.import_module(
-    f"crypt_module.{crypt_name}.{crypt_name}_{crypt_mode}")
+    f"crypt_module.{CRYPT_NAME}.{CRYPT_NAME}_{CRYPT_MODE}")
 send_util = {
     'enable': False,
     'mode': 'fail',
@@ -85,7 +86,7 @@ def post_login(username: str, pwd: str, pub_key):
     resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
                      data=post_dict)
 
-    if resp.status_code == requests.codes.ok:
+    if resp.status_code == requests.codes['ok']:
         if resp.json().get('success'):
             logging.info(username[-4:] + ' login ' + resp.json().get('errmsg'))
         else:
