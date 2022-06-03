@@ -20,7 +20,7 @@ sess = requests.session()
 
 sess.verify = False
 sess.headers.update({
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+    # "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
     "Host": "m.fjcyl.com",
     "Referer": "https://m.fjcyl.com/login"
 })
@@ -73,7 +73,7 @@ def post_study_record():
     if resp.json().get('success'):
         logging.info("学习成功！")
     else:
-        error_raise("学习失败")
+        error_raise(f"学习失败,{resp.text}")
 
 
 def post_login(username: str, pwd: str, pub_key):
