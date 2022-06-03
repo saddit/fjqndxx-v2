@@ -260,7 +260,7 @@ def init_proxy():
         ip = f"http://{proxy.random_pop()}"
         try:
             logging.info(f"正在测试 {ip}")
-            sess.get("https://fjcyl.com/",
+            sess.get("https://m.fjcyl.com/",
                      proxies={'https': ip}, timeout=8)
 
             logging.info(f"测试成功，使用{ip}代理请求")
