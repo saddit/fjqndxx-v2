@@ -16,9 +16,9 @@ urllib3.disable_warnings()
 
 CRYPT_NAME = "sm4"
 CRYPT_MODE = "ecb"
+MAX_TRY = 5
 
 sess = requests.session()
-
 sess.verify = False
 sess.headers.update({
     # "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
@@ -70,11 +70,24 @@ def error_raise(msg: str):
 
 
 def post_study_record():
-    resp = sess.post(url="https://m.fjcyl.com/studyRecord")
-    if resp.json().get('success'):
-        logging.info("学习成功！")
-    else:
-        error_raise(f"学习失败,{resp.text}")
+    has_try = 0
+    errmsg = ""
+    while has_try < MAX_TRY:
+        try:
+            resp = sess.post(url="https://m.fjcyl.com/studyRecord", timeout=5)
+            if resp.json().get('success'):
+                logging.info("学习成功！")
+                return
+            else:
+                has_try += 1
+                errmsg = resp.json()['errmsg']
+                logging.error(f"学习失败，正在重试{has_try}")
+        except requests.ReadTimeout:
+            has_try += 1
+            errmsg = "timeout"
+            logging.error(f"学习失败，正在重试{has_try}")
+            
+    error_raise(f"学习失败,{errmsg}")
 
 
 def post_login(username: str, pwd: str, pub_key):
@@ -138,10 +151,9 @@ def get_profile_from_env():
 
 
 def login(username, pwd, pub_key):
-    max_try = 5
     has_try = 0
     logging.info(f"正在登录尾号{username[-4:]}")
-    while has_try < max_try:
+    while has_try < MAX_TRY:
         # do login
         try:
             post_login(username, pwd, pub_key)
@@ -152,7 +164,7 @@ def login(username, pwd, pub_key):
             has_try += 1
             time.sleep(1)
 
-    if has_try == max_try:
+    if has_try == MAX_TRY:
         error_raise(f"尾号{username[-4:]}尝试登录失败")
 
 
@@ -249,7 +261,7 @@ def init_proxy():
         try:
             logging.info(f"正在测试 {ip}")
             sess.get("https://fjcyl.com/",
-                         proxies={'https': ip}, timeout=8)
+                     proxies={'https': ip}, timeout=8)
 
             logging.info(f"测试成功，使用{ip}代理请求")
             sess.proxies = {"https": ip}
