@@ -50,7 +50,7 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 
 - 添加三个secrets，分别为：username,  pwd,  pub_key
 
-- `1.3.0`开始，需要添加验证码识别的OCR的 api_key，secret_key，ocr_type
+- `1.3.0`开始，需要添加验证码识别的OCR的 ocr_api_key，ocr_secret_key，ocr_type
 
 - 将[该文件](./.github/workflows/run.yml)中的`#`删除并修改cron为你想要触发的时间，默认是每周三14点运行一次，cron如何写请自行百度
 
