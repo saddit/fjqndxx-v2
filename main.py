@@ -1,15 +1,12 @@
-import importlib
 import json
 import logging
 import os
 import time
 from functools import wraps
 
-import requests
-
+from api_module import main_api as api
 from exception import KnownException, SendInitException
 from ocr_module import util as ocrutil
-from api_module import main_api as api
 from send_module import util as sendutil
 
 MAX_TRY = 5
