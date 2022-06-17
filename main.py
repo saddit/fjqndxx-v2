@@ -296,7 +296,7 @@ def start_with_docker():
 def start_with_workflow():
     init_logger()
     logging.info("你正在使用GitHubAction,请确保secret已经配置")
-    run(False, True)
+    run(False, False)
 
 
 def start_local():
