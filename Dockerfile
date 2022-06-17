@@ -6,9 +6,9 @@ ENV username=
 ENV password=
 ENV pubKey=A7E74D2B6282AEB1C5EA3C28D25660A7
 # ocr：baidu_image
-ENV OCR_TYPE=
-ENV OCR_SECRET_KEY=
-ENV OCR_API_KEY=
+ENV ocrType=
+ENV ocrSecret=
+ENV ocrKey=
 # bark, plus-plus, server_chan
 ENV sendType=
 ENV sendKey=
