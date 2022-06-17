@@ -75,19 +75,19 @@ def post_study_record():
     errmsg = ""
     while has_try < MAX_TRY:
         try:
-            resp = sess.post(url="https://m.fjcyl.com/studyRecord", timeout=5)
+            resp = sess.post(url="https://m.fjcyl.com/studyRecord", timeout=12)
             if resp.json().get('success'):
                 logging.info("学习成功！")
                 return
             else:
                 has_try += 1
                 errmsg = resp.json()['errmsg']
-                logging.error(f"学习失败，正在重试{has_try}")
+                logging.error(f"学习失败，正在重试{has_try}, {resp.text}")
         except requests.ReadTimeout:
             has_try += 1
             errmsg = "timeout"
-            logging.error(f"学习失败，正在重试{has_try}")
-            
+            logging.error(f"学习失败，正在重试{has_try},超时")
+
     error_raise(f"学习失败,{errmsg}")
 
 
@@ -276,7 +276,7 @@ def init_proxy():
         ip = f"http://{proxy.random_pop()}"
         try:
             logging.info(f"正在测试 {ip}")
-            sess.get("https://fjcyl.com/",
+            sess.get("https://m.fjcyl.com/",
                      proxies={'https': ip}, timeout=8)
 
             logging.info(f"测试成功，使用{ip}代理请求")
