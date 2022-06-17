@@ -6,34 +6,13 @@ import time
 from functools import wraps
 
 import requests
-import urllib3
 
 from exception import KnownException, SendInitException
 from ocr_module import util as ocrutil
+from api_module import main_api as api
+from send_module import util as sendutil
 
-# 处理https警告
-urllib3.disable_warnings()
-
-
-CRYPT_NAME = "sm4"
-CRYPT_MODE = "ecb"
 MAX_TRY = 5
-
-sess = requests.session()
-sess.verify = False
-sess.headers.update({
-    # "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-    "Host": "m.fjcyl.com",
-    "Referer": "https://m.fjcyl.com/login"
-})
-
-ocr_util = None
-encryptor = importlib.import_module(
-    f"crypt_module.{CRYPT_NAME}.{CRYPT_NAME}_{CRYPT_MODE}")
-send_util = {
-    'enable': False,
-    'mode': 'fail',
-}
 
 
 def catch_exception(func):
@@ -42,13 +21,12 @@ def catch_exception(func):
         try:
             return func(*args, **kwargs)
         except SendInitException as se:
-            send_util['enable'] = False
+            sendutil.enabled(False)
             error_exit(f'{se}', False)
         except KnownException as ke:
             error_exit(f'{ke}', False)
         except BaseException as e:
             error_exit(f"请阅读异常提醒，如果无法解决请截图日志发issue)：{e}")
-
     return catch
 
 
@@ -58,56 +36,12 @@ def init_logger():
 
 
 def error_exit(msg: str, trace=True):
-    send_msg(content=msg, success=False)
+    sendutil.send_msg(content=msg, success=False)
     if trace:
         logging.exception(f"异常信息: {msg}")
     else:
         logging.error(f"异常信息: {msg}")
     exit(-1)
-
-
-def error_raise(msg: str):
-    raise KnownException(msg)
-
-
-def post_study_record():
-    has_try = 0
-    errmsg = ""
-    while has_try < MAX_TRY:
-        try:
-            resp = sess.post(url="https://m.fjcyl.com/studyRecord", timeout=12)
-            if resp.json().get('success'):
-                logging.info("学习成功！")
-                return
-            else:
-                has_try += 1
-                errmsg = resp.json()['errmsg']
-                logging.error(f"学习失败，正在重试{has_try}, {resp.text}")
-        except requests.ReadTimeout:
-            has_try += 1
-            errmsg = "timeout"
-            logging.error(f"学习失败，正在重试{has_try},超时")
-
-    error_raise(f"学习失败,{errmsg}")
-
-
-def post_login(username: str, pwd: str, pub_key: str, code: str):
-    post_dict = {
-        'userName': encryptor.encrypt(username, pub_key),
-        'pwd': encryptor.encrypt(pwd, pub_key),
-        'validateCode': encryptor.encrypt(code, pub_key)
-    }
-
-    resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
-                     data=post_dict)
-
-    if resp.status_code == requests.codes['ok']:
-        if resp.json().get('success'):
-            logging.info(username[-4:] + ' login ' + resp.json().get('errmsg'))
-        else:
-            raise ConnectionError(resp.json().get('errmsg'))
-    else:
-        error_exit(f'官方服务器发生异常,错误代码:{resp.status_code},信息:{resp.text}')
 
 
 def get_profile_from_config():
@@ -145,7 +79,7 @@ def get_profile_from_env():
     secret_key = os.environ['ocrSecret']
     ocr_type = os.environ['ocrType']
 
-    if ext_users is not None and ext_users.__len__() > 1:
+    if ext_users is not None and len(ext_users) > 1:
         for userLine in ext_users.split('\n'):
             usr_split = userLine.split(" ")
             account = {
@@ -164,11 +98,11 @@ def get_profile_from_env():
 def login(username, pwd, pub_key):
     has_try = 0
     logging.info(f"正在登录尾号{username[-4:]}")
-    code = ocrutil.get_validate_code(sess)
     while has_try < MAX_TRY:
+        code = api.get_validate_code()
         # do login
         try:
-            post_login(username, pwd, pub_key, code)
+            api.post_login(username, pwd, pub_key, code)
             break
         except ConnectionError as e:
             logging.error(f'尾号{username[-4:]}登录失败，原因:{e}')
@@ -177,40 +111,7 @@ def login(username, pwd, pub_key):
             time.sleep(1)
 
     if has_try == MAX_TRY:
-        error_raise(f"尾号{username[-4:]}尝试登录失败")
-
-
-def init_sender(send_type, send_key, send_mode):
-    if send_type is None or send_type == '':
-        return
-    if send_key is None or send_key == '':
-        raise SendInitException('缺少配置信息: send_key')
-    else:
-        try:
-            send_util['sender'] = importlib.import_module(
-                f"send_module.{send_type}.sender")
-        except ModuleNotFoundError:
-            raise SendInitException("消息推送类型不存在，请更换类型")
-
-        send_util['enable'] = True
-        send_util['sender'].set_key(send_key)
-        if send_mode is not None and send_mode != "":
-            send_util['mode'] = send_mode
-
-
-def send_msg(content, success=True):
-    if not send_util['enable']:
-        return
-    if send_util['mode'] == 'both' \
-            or (send_util['mode'] == 'fail' and not success) \
-            or (send_util['mode'] == 'success' and success):
-        res = send_util['sender'].send(title="青年大学习打卡",
-                                       content=f"状态: {'成功' if success else '失败'}\n\n"
-                                               f"信息 {content}")
-        if not res['success']:
-            logging.warning(f"消息推送失败，原因：{res['message']}")
-        else:
-            logging.info(f"消息推送成功")
+        raise KnownException(f"尾号{username[-4:]}尝试登录失败")
 
 
 def multi_study(accounts, pub_key):
@@ -221,16 +122,15 @@ def multi_study(accounts, pub_key):
         if account['username'] is None or account['pwd'] is None:
             logging.warning("多人打卡配置存在错误,将跳过部分用户,请检查配置的用户名密码格式")
             continue
-
         try:
             login(account['username'], account['pwd'], pub_key)
-            post_study_record()
+            api.post_study_record()
             push_msg += f"尾号{account['username'][-4:]}打卡成功\n"
         except KnownException as e:
             push_msg += f"尾号{account['username'][-4:]}失败:{e}\n"
             all_success = False
     push_msg += "全部打卡成功" if all_success else "部分打卡失败"
-    send_msg(push_msg, all_success)
+    sendutil.send_msg(push_msg, all_success)
 
 
 def single_study(username, password, pub_key):
@@ -238,9 +138,9 @@ def single_study(username, password, pub_key):
     # do login
     login(username, password, pub_key)
     # do study
-    post_study_record()
+    api.post_study_record()
     # send success message
-    send_msg("打卡成功")
+    sendutil.send_msg("打卡成功")
 
 
 @catch_exception
@@ -253,12 +153,11 @@ def run(use_config: bool, use_proxy: bool = False):
         api_key, secret_key, ocr_type = get_profile_from_config(
         ) if use_config else get_profile_from_env()
     # init sender
-    init_sender(send_type, send_key, send_mode)
+    sendutil.init_sender(send_type, send_key, send_mode)
     # init ocr
     ocrutil.init_ocr(ocr_type, api_key, secret_key)
     # init proxy
-    if use_proxy:
-        init_proxy()
+    api.init_proxy() if use_proxy else 0
     # study proc
     if accounts is not None and len(accounts) > 0:
         if pwd is not None and username is not None and pwd != "" and username != "":
@@ -266,25 +165,6 @@ def run(use_config: bool, use_proxy: bool = False):
         multi_study(accounts, pub_key)
     else:
         single_study(username, pwd, pub_key)
-
-
-def init_proxy():
-    logging.info("正在尝试使用代理IP")
-    module = importlib.import_module("proxy_module.proxy_fetcher")
-    proxy = module.ProxyFecher()
-    while not proxy.empty():
-        ip = f"http://{proxy.random_pop()}"
-        try:
-            logging.info(f"正在测试 {ip}")
-            sess.get("https://m.fjcyl.com/",
-                     proxies={'https': ip}, timeout=8)
-
-            logging.info(f"测试成功，使用{ip}代理请求")
-            sess.proxies = {"https": ip}
-            return
-        except BaseException as e:
-            logging.info(f"{ip} 不可用, {e}")
-    error_raise("找不到可用代理IP")
 
 
 def start_with_docker():
@@ -296,7 +176,7 @@ def start_with_docker():
 def start_with_workflow():
     init_logger()
     logging.info("你正在使用GitHubAction,请确保secret已经配置")
-    run(False, False)
+    run(False, True)
 
 
 def start_local():
