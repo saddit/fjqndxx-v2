@@ -9,6 +9,7 @@ import requests
 import urllib3
 
 from exception import KnownException, SendInitException
+from ocr_module import util as ocrutil
 
 # 处理https警告
 urllib3.disable_warnings()
@@ -90,10 +91,11 @@ def post_study_record():
     error_raise(f"学习失败,{errmsg}")
 
 
-def post_login(username: str, pwd: str, pub_key):
+def post_login(username: str, pwd: str, pub_key: str, code: str):
     post_dict = {
         'userName': encryptor.encrypt(username, pub_key),
-        'pwd': encryptor.encrypt(pwd, pub_key)
+        'pwd': encryptor.encrypt(pwd, pub_key),
+        'validateCode': encryptor.encrypt(code, pub_key)
     }
 
     resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
@@ -115,6 +117,10 @@ def get_profile_from_config():
         pwd = config_json.get('pwd')
         pub_key = config_json.get('rsaKey').get('public')
 
+        api_key = config_json.get('ocr').get('ak')
+        secret_key = config_json.get('ocr').get('sk')
+        ocr_type = config_json.get('ocr').get('type')
+
         send_config = config_json.get('send')
         accounts = config_json.get("extUsers")
         if send_config is not None:
@@ -122,7 +128,7 @@ def get_profile_from_config():
             send_key = send_config.get('key')
             send_mode = send_config.get('mode')
     return username, pwd, pub_key, \
-        send_type, send_key, send_mode, accounts
+        send_type, send_key, send_mode, accounts, api_key, secret_key, ocr_type
 
 
 def get_profile_from_env():
@@ -134,6 +140,11 @@ def get_profile_from_env():
     send_mode = os.environ['sendMode']
     ext_users = os.environ['extUsers']
     accounts = []
+
+    api_key = os.environ['ocrKey']
+    secret_key = os.environ['ocrSecret']
+    ocr_type = os.environ['ocrType']
+
     if ext_users is not None and ext_users.__len__() > 1:
         for userLine in ext_users.split('\n'):
             usr_split = userLine.split(" ")
@@ -147,16 +158,17 @@ def get_profile_from_env():
                 account['pwd'] = usr_split[1]
             accounts.append(account)
     return username, pwd, pub_key, \
-        send_type, send_key, send_mode, accounts
+        send_type, send_key, send_mode, accounts, api_key, secret_key, ocr_type
 
 
 def login(username, pwd, pub_key):
     has_try = 0
     logging.info(f"正在登录尾号{username[-4:]}")
+    code = ocrutil.get_validate_code(sess)
     while has_try < MAX_TRY:
         # do login
         try:
-            post_login(username, pwd, pub_key)
+            post_login(username, pwd, pub_key, code)
             break
         except ConnectionError as e:
             logging.error(f'尾号{username[-4:]}登录失败，原因:{e}')
@@ -237,9 +249,13 @@ def run(use_config: bool, use_proxy: bool = False):
     # get default config
     username, pwd, pub_key, \
         send_type, send_key, send_mode, \
-        accounts = get_profile_from_config() if use_config else get_profile_from_env()
+        accounts, \
+        api_key, secret_key, ocr_type = get_profile_from_config(
+        ) if use_config else get_profile_from_env()
     # init sender
     init_sender(send_type, send_key, send_mode)
+    # init ocr
+    ocrutil.init_ocr(ocr_type, api_key, secret_key)
     # init proxy
     if use_proxy:
         init_proxy()

@@ -9,6 +9,11 @@
     "key": "填写server酱或其他的SendKey",
     "mode": "默认fail(fail/success/both)"
   },
+  "ocr": {
+    "sk": "填写API KEY",
+    "ak": "填写SECRET KEY",
+    "type": "baidu_image"
+  },
   "extUsers": [
     {
       "username": "",
