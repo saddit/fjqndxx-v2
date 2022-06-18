@@ -1,5 +1,6 @@
 name: "疑问咨询"
 description: 其他请用此模板
+labels: question
 body:
   - type: textarea
     id: content
