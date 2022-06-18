@@ -1,0 +1,20 @@
+name: "功能建议"
+description: 如果有需求或者建议请用此模板
+labels: [feature]
+body:
+  - type: textarea
+    id: detail
+    attributes:
+      label: 需求或建议描述
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: 你希望达到的效果
+    validations:
+      required: true
+  - type: textarea
+    id: others
+    attributes:
+      label: 其他补充
