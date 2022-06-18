@@ -2,6 +2,7 @@ name: "疑问咨询"
 description: 其他请用此模板
 body:
   - type: textarea
+    id: content
     attributes:
       label: 内容
     validations:
