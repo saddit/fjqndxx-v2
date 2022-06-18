@@ -1,21 +1,29 @@
----
-name: 报告Bug
-about: 如果想报告运行出错请用此模板
-title: "[BUG]"
-labels: bug
-assignees: ''
-
----
-
-## 问题描述
-
-## 使用的版本
-
-**python:**[e.g. 3.7]
-**version:**[e.g. 1.2.2]
-
-## 完整的运行日志
-
-```text
-
-```
+name: "报告Bug"
+description: 如果想报告运行出错请用此模板
+body:
+  - type: input
+    attributes:
+      label: 使用的Python版本
+      placeholder: 3.7
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: 使用的发行版本
+      placeholder: 1.3.0
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 问题描述
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 运行日志
+      description: 请复制或截图完整的错误日志
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 其他补充
