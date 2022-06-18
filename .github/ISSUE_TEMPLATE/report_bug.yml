@@ -27,8 +27,8 @@ body:
         - label: "docker/docker-compose"
         - label: "github action"
         - label: "others"
-      validations:
-        required: true
+    validations:
+      required: true
   validations:
   - type: textarea
     id: detail
