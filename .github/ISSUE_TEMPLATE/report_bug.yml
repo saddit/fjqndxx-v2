@@ -16,10 +16,18 @@ body:
       placeholder: '1.3.0'
     validations:
       required: true
+  - type: input
+    id: platform
+    attributes:
+      label: 运行平台
+      placeholder: 'github-action/服务器/本地/docker'
+    validations:
+      required: true
   - type: textarea
     id: detail
     attributes:
       label: 问题描述
+      description: 简明扼要的说明你遇到的问题以及对代码进行过自定义修改
     validations:
       required: true
   - type: textarea
