@@ -23,10 +23,10 @@ body:
       description: 如何进行部署的
       multiple: false
       options:
-        - label: "local/server"
-        - label: "docker/docker-compose"
-        - label: "github action"
-        - label: "others"
+        - "local/server"
+        - "docker/docker-compose"
+        - "github action"
+        - "others"
     validations:
       required: true
   - type: textarea
