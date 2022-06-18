@@ -1,4 +1,5 @@
 name: "报告Bug"
+labels: bug
 description: 如果想报告运行出错请用此模板
 body:
   - type: input
