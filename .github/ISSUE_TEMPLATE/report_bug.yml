@@ -29,7 +29,6 @@ body:
         - label: "others"
     validations:
       required: true
-  validations:
   - type: textarea
     id: detail
     attributes:
