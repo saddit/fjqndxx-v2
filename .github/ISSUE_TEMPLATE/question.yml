@@ -1,0 +1,8 @@
+name: "疑问咨询"
+description: 其他请用此模板
+body:
+  - type: textarea
+    attributes:
+      label: 内容
+    validations:
+      required: true
