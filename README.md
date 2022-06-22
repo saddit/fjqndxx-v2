@@ -28,7 +28,7 @@
 A7E74D2B6282AEB1C5EA3C28D25660A7
 ```
 
-#### 申请Ocr识别接口的权限
+#### 申请Ocr识别接口的权限 （1.3.1版本以后可选本地OCR，如果不使用BaiduAPI则跳过该步骤）
 
 [详细教程请点击这里](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/)
 
