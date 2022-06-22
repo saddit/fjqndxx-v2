@@ -104,13 +104,14 @@ docker-compose up -d
 
 ## 可选识别类型
 
-> `1.3.0`  
+> `1.3.0` 及以上  
 
-GithubAction（可选）添加新的secrets OCR_TYPE 来指定识别类型
+GithubAction（可选）添加新的secrets:ocr_type来指定识别类型
 
 其他方式在config.json中修改指定配置项即可
 
 - baidu_image [默认方法,需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/)
+- tesseract [1.3.1,本地ocr识别](./doc/ocr_help/tesseract.md)
 
 ## 可选消息推送
 
