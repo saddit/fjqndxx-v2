@@ -12,7 +12,7 @@
   "ocr": {
     "sk": "填写API KEY",
     "ak": "填写SECRET KEY",
-    "type": "baidu_image"
+    "type": "baidu_image/tesseract"
   },
   "extUsers": [
     {
