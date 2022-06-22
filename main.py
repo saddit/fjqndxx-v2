@@ -10,6 +10,7 @@ from ocr_module import util as ocrutil
 from send_module import util as sendutil
 
 MAX_TRY = 5
+THIS_PATH = os.path.dirname(__file__)
 
 
 def catch_exception(func):
@@ -42,7 +43,7 @@ def error_exit(msg: str, trace=True):
 
 
 def get_profile_from_config():
-    with open('config.json', 'r', encoding='utf-8') as config:
+    with open(os.path.join(THIS_PATH, 'config.json'), 'r', encoding='utf-8') as config:
         config_json = json.loads(config.read())
         username = config_json.get('username')
         pwd = config_json.get('pwd')
