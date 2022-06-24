@@ -106,8 +106,10 @@ GithubAction（可选）添加新的secrets:ocr_type来指定识别类型
 
 其他方式在config.json中修改指定配置项即可
 
-- baidu_image [默认方法,需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/)
-- tesseract [1.3.1,本地ocr识别](./doc/ocr_help/tesseract.md)
+| 可选值      | 使用方法                                                     | 支持版本 |
+| ----------- | ------------------------------------------------------------ | -------- |
+| baidu_image | [默认方法,需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/) | 1.3.0    |
+| tesseract   | [本地ocr识别](./doc/ocr_help/tesseract.md)                   | 1.3.1    |
 
 ## 可选消息推送
 
@@ -123,11 +125,11 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 
 **配置项解读**
 
-| 配置项    | 说明                                                         | 可选值                                        |
-| --------- | ------------------------------------------------------------ | --------------------------------------------- |
+| 配置项    | 说明                                                         | 可选值                                                       |
+| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | send_type | 消息推送类型 **不填写则不推送**                              | [server_chan](./doc/send_help/server_chan.md) [bark(Beta)](./doc/send_help/bark.md) [push_plus](./doc/send_help/push_plus.md) |
-| send_key  | 消息推送服务的密钥 在推送服务的官网注册获得                  |                                               |
-| send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                             |
+| send_key  | 消息推送服务的密钥                                           | 在推送服务的官网注册获得                                     |
+| send_mode | 推送模式 打卡失败时推送(fail) 打卡成功时推送(success) 无论成功与否都推送(both) **默认失败时推送** | fail success both                                            |
 
 ## 多人打卡
 
