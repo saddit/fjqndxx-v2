@@ -3,3 +3,5 @@ gmssl
 pycryptodome
 lxml
 regex
+pytesseract
+pillow

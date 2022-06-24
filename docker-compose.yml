@@ -10,8 +10,8 @@ services:
       - username=
       - password=
       - pubKey=A7E74D2B6282AEB1C5EA3C28D25660A7
-      # ocr：baidu_image
-      - ocrType=
+      # ocr：baidu_image, tesseract
+      - ocrType=tesseract
       - ocrSecret=
       - ocrKey=
       # bark, plus-plus, server_chan
