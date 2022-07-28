@@ -109,7 +109,8 @@ GithubAction（可选）添加新的secrets:ocr_type来指定识别类型
 | 可选值      | 使用方法                                                     | 支持版本 |
 | ----------- | ------------------------------------------------------------ | -------- |
 | baidu_image | [默认方法,需要到百度AI中申请](https://blog.pressed.top/2021/02/14/signUpBaiduOcr/) | 1.3.0    |
-| tesseract   | [本地ocr识别,Windows推荐,Linux需要安装配置](./doc/ocr_help/tesseract.md)                   | 1.3.1    |
+| tesseract   | [本地ocr识别,Windows推荐,Linux需要安装配置](./doc/ocr_help/tesseract.md) | 1.3.1    |
+| azure       | [需要微软账号申请](./doc/ocr_help/azure.md)                  | 1.3.2    |
 
 ## 可选消息推送
 
