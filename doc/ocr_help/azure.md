@@ -14,8 +14,8 @@
  6. 填写config.json, ocr.ak 为终结点, ocr.sk 为其中一个密钥, 例:
     ```json
     "ocr": {
-        "sk": "hksight.cognitiveservices.azure.com",
-        "ak": "182391820319283019",
+        "ak": "hksight.cognitiveservices.azure.com",
+        "sk": "182391820319283019",
         "type": "azure"
     },
     ```
