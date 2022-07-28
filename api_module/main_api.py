@@ -28,6 +28,7 @@ sess.headers.update({
     "Referer": "https://m.fjcyl.com/login"
 })
 
+
 def init_proxy():
     logging.info("正在尝试使用代理IP")
     module = importlib.import_module("proxy_module.proxy_fetcher")
@@ -55,7 +56,7 @@ def get_validate_code() -> str:
         try:
             # noinspection PyUnresolvedReferences
             res = ocrutil.img_ocr(base64.b64encode(resp.content))
-            logging.info('获取验证码成功')
+            logging.info(f'获取验证码成功: {res}')
             return res
         except Exception as e:
             logging.warning(f'获取验证码失败，原因:{e}')
@@ -96,7 +97,7 @@ def post_login(username: str, pwd: str, pub_key: str, code: str):
     }
 
     resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
-                     data=post_dict)
+                     data=post_dict, timeout=5)
 
     if resp.status_code == requests.codes['ok']:
         if resp.json().get('success'):
