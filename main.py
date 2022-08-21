@@ -3,7 +3,7 @@ import logging
 import os
 import time
 from functools import wraps
-
+from util import is_set
 from api_module import main_api as api
 from exception import KnownException, SendInitException
 from ocr_module import util as ocrutil
@@ -117,7 +117,7 @@ def multi_study(accounts, pub_key):
     push_msg = ""
     all_success = True
     for account in accounts:
-        if account['username'] is None or account['pwd'] is None:
+        if not is_set(account['username']) or not is_set(account['pwd']):
             logging.warning("多人打卡配置存在错误,将跳过部分用户,请检查配置的用户名密码格式")
             continue
         try:
@@ -148,8 +148,7 @@ def run(use_config: bool, use_proxy: bool = False):
     username, pwd, pub_key, \
         send_type, send_key, send_mode, \
         accounts, \
-        api_key, secret_key, ocr_type = get_profile_from_config(
-        ) if use_config else get_profile_from_env()
+        api_key, secret_key, ocr_type = get_profile_from_config() if use_config else get_profile_from_env()
     # init sender
     sendutil.init_sender(send_type, send_key, send_mode)
     # init ocr
@@ -157,8 +156,8 @@ def run(use_config: bool, use_proxy: bool = False):
     # init proxy
     api.init_proxy() if use_proxy else 0
     # study proc
-    if accounts is not None and len(accounts) > 0:
-        if pwd is not None and username is not None and pwd != "" and username != "":
+    if is_set(accounts):
+        if is_set(username) and is_set(pwd):
             accounts.append({"username": username, "pwd": pwd})
         multi_study(accounts, pub_key)
     else:

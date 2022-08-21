@@ -2,6 +2,7 @@ import importlib
 import logging
 
 from exception.exceptions import KnownException
+from util import is_set
 
 ocr_util = None
 
@@ -10,7 +11,7 @@ def img_ocr(img: bytes) -> str:
 
 def init_ocr(ocr_type: str, ak: str, sk: str):
     global ocr_util
-    if ocr_type is None or ocr_type == '':
+    if not is_set(ocr_type):
         ocr_type = "baidu_image"
     try:
         ocr_util = importlib.import_module(

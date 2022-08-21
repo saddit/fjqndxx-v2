@@ -1,6 +1,7 @@
 import importlib
 import logging
 from exception import SendInitException
+from util import is_set
 
 
 send_util = {
@@ -13,9 +14,9 @@ def enabled(enable: bool):
 
 
 def init_sender(send_type, send_key, send_mode):
-    if send_type is None or send_type == '':
+    if not is_set(send_type):
         return
-    if send_key is None or send_key == '':
+    if not is_set(send_key):
         raise SendInitException('缺少配置信息: send_key')
     else:
         try:
@@ -26,7 +27,7 @@ def init_sender(send_type, send_key, send_mode):
 
         send_util['enable'] = True
         send_util['sender'].set_key(send_key)
-        if send_mode is not None and send_mode != "":
+        if not is_set(send_mode):
             send_util['mode'] = send_mode
 
 
