@@ -19,5 +19,6 @@
       "username": "",
       "pwd": ""
     }
-  ]
+  ],
+  "maxRetry": 5
 }
