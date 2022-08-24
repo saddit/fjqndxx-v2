@@ -9,7 +9,7 @@ from exception import KnownException, SendInitException
 from ocr_module import util as ocrutil
 from send_module import util as sendutil
 
-MAX_TRY = 5
+max_retry = 5
 THIS_PATH = os.path.dirname(__file__)
 
 
@@ -48,6 +48,11 @@ def get_profile_from_config():
         username = config_json.get('username')
         pwd = config_json.get('pwd')
         pub_key = config_json.get('rsaKey').get('public')
+        
+        global max_retry
+        max_retry = config_json.get('maxRetry')
+        max_retry = max_retry if is_set(max_retry) else 5
+        logging.info("set max retry %d", max_retry)
 
         api_key = config_json.get('ocr').get('ak')
         secret_key = config_json.get('ocr').get('sk')
@@ -72,6 +77,11 @@ def get_profile_from_env():
     send_mode = os.environ['sendMode']
     ext_users = os.environ['extUsers']
     accounts = []
+    
+    global max_retry
+    max_retry = os.environ['maxRetry']
+    max_retry = max_retry if is_set(max_retry) else 5
+    logging.info("set max retry %d", max_retry)
 
     api_key = os.environ['ocrKey']
     secret_key = os.environ['ocrSecret']
@@ -96,7 +106,7 @@ def get_profile_from_env():
 def login(username, pwd, pub_key):
     has_try = 0
     logging.info(f"正在登录尾号{username[-4:]}")
-    while has_try < MAX_TRY:
+    while has_try < max_retry:
         code = api.get_validate_code()
         # do login
         try:
@@ -108,7 +118,7 @@ def login(username, pwd, pub_key):
             has_try += 1
             time.sleep(1)
 
-    if has_try == MAX_TRY:
+    if has_try == max_retry:
         raise KnownException(f"尾号{username[-4:]}尝试登录失败")
 
 
