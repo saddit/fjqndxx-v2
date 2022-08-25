@@ -161,6 +161,13 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 
 [![Stargazers over time](https://starchart.cc/838239178/tk-auto-study.svg)](https://starchart.cc/838239178/tk-auto-study)
 
+## 鸣谢
+
+> [IntelliJ IDEA](https://zh.wikipedia.org/zh-hans/IntelliJ_IDEA) 是一个在各个方面都最大程度地提高开发人员的生产力的 IDE，适用于 JVM 平台语言。
+
+特别感谢 [JetBrains](https://www.jetbrains.com/?from=mirai) 为开源项目提供免费的 [IntelliJ IDEA](https://www.jetbrains.com/idea/?from=mirai) 等 IDE 的授权  
+[<img src=".github/jetbrains-variant-3.png" width="200"/>](https://www.jetbrains.com/?from=mirai)
+
 ## 赏我一杯Coffee
 
 ![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/qq_pic_merged_1633171137809.jpg)
