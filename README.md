@@ -163,10 +163,12 @@ GithubAction用户可通过添加secrets：send_type, send_key, send_mode 来使
 
 ## 鸣谢
 
-> [IntelliJ IDEA](https://zh.wikipedia.org/zh-hans/IntelliJ_IDEA) 是一个在各个方面都最大程度地提高开发人员的生产力的 IDE，适用于 JVM 平台语言。
+> [pytcharm](https://zh.wikipedia.org/zh-hans/pycharm) 是一个在各个方面都最大程度地提高开发人员的生产力的 IDE，适用于 Python 语言。
 
-特别感谢 [JetBrains](https://www.jetbrains.com/?from=mirai) 为开源项目提供免费的 [IntelliJ IDEA](https://www.jetbrains.com/idea/?from=mirai) 等 IDE 的授权  
-[<img src=".github/jetbrains-variant-3.png" width="200"/>](https://www.jetbrains.com/?from=mirai)
+特别感谢 [JetBrains](https://www.jetbrains.com/?from=mirai) 为开源项目提供免费的 [PyCharm](https://www.jetbrains.com/pycharm/?from=mirai) 等 IDE 的授权
+
+[<img src="https://github.com/mamoe/mirai/raw/dev/.github/jetbrains-variant-3.png" width="200"/>](https://www.jetbrains.com/?from=mirai)
+
 
 ## 赏我一杯Coffee
 
