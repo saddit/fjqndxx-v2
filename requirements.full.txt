@@ -1,0 +1,7 @@
+requests
+gmssl
+pycryptodome
+lxml
+regex
+Pillow
+pytesseract
