@@ -70,7 +70,7 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 
 > requirements.full.txt 包含了项目中所有可能的python依赖 
 > 
-> rquirements.txt 包含默认情况下需要的最少依赖
+> requirements.txt 包含默认情况下需要的最少依赖
 
 #### crontab
 
