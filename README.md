@@ -68,6 +68,10 @@ A7E74D2B6282AEB1C5EA3C28D25660A7
 
 在本地或者国内服务器上部署不需要代理，可兼容**Python3.7**版本
 
+> requirements.full.txt 包含了项目中所有可能的python依赖 
+> 
+> rquirements.txt 包含默认情况下需要的最少依赖
+
 #### crontab
 
 克隆项目并更改配置文件名称
