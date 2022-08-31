@@ -36,6 +36,7 @@ jobs:
         sendKey: ${{secrets.SEND_KEY}}
         sendMode: ${{secrets.SEND_MODE}}
         extUsers: ${{secrets.EXT_USERS}}
+        maxRetry: ${{secrets.MAX_RETRY}}
       run:
         python3 workflow.py
         
