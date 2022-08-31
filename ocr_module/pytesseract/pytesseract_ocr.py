@@ -16,4 +16,4 @@ def get_result(img: bytes) -> str:
     img = base64.standard_b64decode(img)
     gray = Image.open(BytesIO(img)).resize((157,52))
     text = pytesseract.image_to_string(gray).strip()
-    return ''.join(re.findall(r"-?[1-9]\d*", text))
+    return ''.join(re.findall(r"-?[0-9]\d*", text))
