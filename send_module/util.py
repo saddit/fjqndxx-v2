@@ -27,7 +27,7 @@ def init_sender(send_type, send_key, send_mode):
 
         send_util['enable'] = True
         send_util['sender'].set_key(send_key)
-        if not is_set(send_mode):
+        if is_set(send_mode):
             send_util['mode'] = send_mode
 
 
