@@ -23,7 +23,7 @@ encryptor = importlib.import_module(
 sess = requests.session()
 sess.verify = False
 sess.headers.update({
-    # "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
     "Host": "m.fjcyl.com",
     "Referer": "https://m.fjcyl.com/login"
 })
@@ -52,7 +52,7 @@ def get_validate_code() -> str:
     has_try = 0
     while has_try < max_try:
         resp = sess.get(
-            url=f"https://m.fjcyl.com/validateCode?0.{datetime.microsecond}&width=58&height=19&num=4", timeout=5)
+            url=f"https://m.fjcyl.com/validateCode", timeout=5)
         try:
             # noinspection PyUnresolvedReferences
             res = ocrutil.img_ocr(base64.b64encode(resp.content))
