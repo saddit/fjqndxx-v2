@@ -51,9 +51,8 @@ def get_validate_code() -> str:
     max_try = 5
     has_try = 0
     while has_try < max_try:
-        resp = sess.get(
-            url=f"https://m.fjcyl.com/validateCode", timeout=10)
         try:
+            resp = sess.get(url=f"https://m.fjcyl.com/validateCode", timeout=10)
             # noinspection PyUnresolvedReferences
             res = ocrutil.img_ocr(base64.b64encode(resp.content))
             logging.info(f'获取验证码成功: {res}')
