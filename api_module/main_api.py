@@ -2,7 +2,6 @@ import base64
 import importlib
 import logging
 import time
-from datetime import datetime
 
 import requests
 import urllib3
@@ -15,7 +14,7 @@ urllib3.disable_warnings()
 
 CRYPT_NAME = "sm4"
 CRYPT_MODE = "ecb"
-MAX_TRY = 5
+max_retry = 5
 
 encryptor = importlib.import_module(
     f"crypt_module.{CRYPT_NAME}.{CRYPT_NAME}_{CRYPT_MODE}")
@@ -48,9 +47,8 @@ def init_proxy():
 
 
 def get_validate_code() -> str:
-    max_try = 5
     has_try = 0
-    while has_try < max_try:
+    while has_try < max_retry:
         try:
             resp = sess.get(url=f"https://m.fjcyl.com/validateCode", timeout=10)
             # noinspection PyUnresolvedReferences
@@ -63,14 +61,14 @@ def get_validate_code() -> str:
             has_try += 1
             time.sleep(1)
 
-    if has_try == max_try:
+    if has_try == max_retry:
         raise KnownException("验证码解析失败,请尝试更换方式或发issue寻求帮助")
 
 
 def post_study_record():
     has_try = 0
     errmsg = ""
-    while has_try < MAX_TRY:
+    while has_try < max_retry:
         try:
             resp = sess.post(url="https://m.fjcyl.com/studyRecord", timeout=12)
             if resp.json().get('success'):

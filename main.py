@@ -9,7 +9,6 @@ from exception import KnownException, SendInitException
 from ocr_module import util as ocrutil
 from send_module import util as sendutil
 
-max_retry = 5
 THIS_PATH = os.path.dirname(__file__)
 
 
@@ -49,10 +48,9 @@ def get_profile_from_config():
         pwd = config_json.get('pwd')
         pub_key = config_json.get('rsaKey').get('public')
         
-        global max_retry
-        max_retry = config_json.get('maxRetry')
-        max_retry = max_retry if is_set(max_retry) else 5
-        logging.info("set max retry %d", max_retry)
+        api.max_retry = config_json.get('maxRetry')
+        api.max_retry = api.max_retry if is_set(api.max_retry) else 5
+        logging.info("set max retry %d", api.max_retry)
 
         api_key = config_json.get('ocr').get('ak')
         secret_key = config_json.get('ocr').get('sk')
@@ -78,18 +76,17 @@ def get_profile_from_env():
     ext_users = os.environ['extUsers']
     accounts = []
     
-    global max_retry
-    max_retry = os.environ['maxRetry']
-    max_retry = max_retry if is_set(max_retry) else 5
-    logging.info("set max retry %d", max_retry)
+    api.max_retry = os.environ['maxRetry']
+    api.max_retry = api.max_retry if is_set(api.max_retry) else 5
+    logging.info("set max retry %d", api.max_retry)
 
     api_key = os.environ['ocrKey']
     secret_key = os.environ['ocrSecret']
     ocr_type = os.environ['ocrType']
 
     if ext_users is not None and len(ext_users) > 1:
-        for userLine in ext_users.split('\n'):
-            usr_split = userLine.split(" ")
+        for user_line in ext_users.split('\n'):
+            usr_split = user_line.split(" ")
             account = {
                 "username": None,
                 "pwd": None
@@ -106,7 +103,7 @@ def get_profile_from_env():
 def login(username, pwd, pub_key):
     has_try = 0
     logging.info(f"正在登录尾号{username[-4:]}")
-    while has_try < max_retry:
+    while has_try < api.max_retry:
         code = api.get_validate_code()
         # do login
         try:
@@ -118,7 +115,7 @@ def login(username, pwd, pub_key):
             has_try += 1
             time.sleep(1)
 
-    if has_try == max_retry:
+    if has_try == api.max_retry:
         raise KnownException(f"尾号{username[-4:]}尝试登录失败")
 
 
