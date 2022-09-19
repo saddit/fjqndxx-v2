@@ -103,13 +103,13 @@ def get_profile_from_env():
 def login(username, pwd, pub_key):
     has_try = 0
     logging.info(f"正在登录尾号{username[-4:]}")
-    while has_try < api.max_retry:
+    while has_try < api.max_retry:    
         code = api.get_validate_code()
         # do login
         try:
             api.post_login(username, pwd, pub_key, code)
             break
-        except ConnectionError as e:
+        except Exception as e:
             logging.error(f'尾号{username[-4:]}登录失败，原因:{e}')
             logging.info(f'尝试重新登录，重试次数{has_try}')
             has_try += 1

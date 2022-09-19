@@ -94,7 +94,7 @@ def post_login(username: str, pwd: str, pub_key: str, code: str):
     }
 
     resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
-                     data=post_dict, timeout=5)
+                     data=post_dict, timeout=10)
 
     if resp.status_code == requests.codes['ok']:
         if resp.json().get('success'):
