@@ -11,6 +11,8 @@
 > 2022.08.31: 新增pytesseract OCR识别, 需要安装依赖，Linux推荐(1.3.3及以上可用),修复send.mode总是fail的问题
 >
 > 2022.09.12: 修复一个可能导致 connection timeout 的原因
+>
+> 2022.09.20: 优化执行流程和pytesseract参数
 
 🤺妈妈再也不用担心我团课没看被团支书赶着催了
 
