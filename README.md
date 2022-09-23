@@ -1,18 +1,6 @@
-# 青年大学习/团课自动打卡
+# 此分支将保留历史版本代码，历史版本已经无任何使用价值，仅供学习与参考
 
-![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.7-green.svg)
-
-[此处展示最近更新日志，完整日志搓这里](./doc/Log.md)
-
-> 2022.07.28: 新增微软Azure的计算机视觉OCR，仔细阅读帮助文档来使用这个新功能
->
-> 2022.08.24: 新增配置 maxRetry 自定义最大重试次数
->
-> 2022.08.31: 新增pytesseract OCR识别, 需要安装依赖，Linux推荐(1.3.3及以上可用),修复send.mode总是fail的问题
->
-> 2022.09.12: 修复一个可能导致 connection timeout 的原因
->
-> 2022.09.20: 优化执行流程和pytesseract参数
+青年大学习/团课自动打卡
 
 🤺妈妈再也不用担心我团课没看被团支书赶着催了
 
