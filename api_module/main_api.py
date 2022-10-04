@@ -1,106 +1,135 @@
-import base64
-import importlib
+from functools import wraps
 import logging
-import time
-
 import requests
 import urllib3
-from exception import KnownException
-from ocr_module import util as ocrutil
+from api_module.sign import get_ts, use_sign
+from entity_module import UserInfo, TokenInfo, CourseInfo
+from exception.exceptions import KnownException
 
 # 处理https警告
 urllib3.disable_warnings()
 
-
-CRYPT_NAME = "sm4"
-CRYPT_MODE = "ecb"
 max_retry = 5
 
-encryptor = importlib.import_module(
-    f"crypt_module.{CRYPT_NAME}.{CRYPT_NAME}_{CRYPT_MODE}")
+base = "https://api.iyunci.cn/fjqndxx/v1/app/big_study"
 
 sess = requests.session()
 sess.verify = False
 sess.headers.update({
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-    "Host": "m.fjcyl.com",
-    "Referer": "https://m.fjcyl.com/login"
+    "Host": "api.iyunci.cn",
+    "Origin": "https://fjqndxx.iyunci.cn",
+    "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.20(0x18001442) NetType/WIFI Language/zh_CN",
+    "Timestamp": 0,
+    "Sign": "",
+    "Authorization": ""
 })
 
 
-def init_proxy():
-    logging.info("正在尝试使用代理IP")
-    module = importlib.import_module("proxy_module.proxy_fetcher")
-    proxy = module.ProxyFecher()
-    while not proxy.empty():
-        ip = f"http://{proxy.random_pop()}"
-        try:
-            logging.info(f"正在测试 {ip}")
-            sess.get("https://m.fjcyl.com/",
-                     proxies={'https': ip}, timeout=8)
-
-            logging.info(f"测试成功，使用{ip}代理请求")
-            sess.proxies = {"https": ip}
-        except BaseException as e:
-            logging.info(f"{ip} 不可用, {e}")
-    raise KnownException("找不到可用代理IP")
+def __retry_api(func):
+    @wraps(func)
+    def retry(*args, **kwargs):
+        cnt = 1
+        while cnt <= max_retry:
+            try:
+                return func(*args, **kwargs)
+            except KnownException as e:
+                logging.error("api-err: %s, retry %d", e, cnt)
+                cnt += 1
+        if cnt == max_retry:
+            raise KnownException("exceeded max retries")
+    return retry
 
 
-def get_validate_code() -> str:
-    has_try = 0
-    while has_try < max_retry:
-        try:
-            resp = sess.get(url=f"https://m.fjcyl.com/validateCode", timeout=10)
-            # noinspection PyUnresolvedReferences
-            res = ocrutil.img_ocr(base64.b64encode(resp.content))
-            logging.info(f'获取验证码成功: {res}')
-            return res
-        except Exception as e:
-            logging.warning(f'获取验证码失败，原因:{e}')
-            logging.warning(f'正在重试, 次数:{has_try}')
-            has_try += 1
-            time.sleep(1)
-
-    if has_try == max_retry:
-        raise KnownException("验证码解析失败,请尝试更换方式或发issue寻求帮助")
+def initalize(tk: str, retry: int):
+    global max_retry
+    max_retry = retry
+    sess.headers.update({
+        "Authorization": tk
+    })
 
 
-def post_study_record():
-    has_try = 0
-    errmsg = ""
-    while has_try < max_retry:
-        try:
-            resp = sess.post(url="https://m.fjcyl.com/studyRecord", timeout=12)
-            if resp.json().get('success'):
-                logging.info("学习成功！")
-                return
-            else:
-                has_try += 1
-                errmsg = resp.json()['errmsg']
-                logging.error(f"学习失败，正在重试{has_try}, {resp.text}")
-        except requests.ReadTimeout:
-            has_try += 1
-            errmsg = "timeout"
-            logging.error(f"学习失败，正在重试{has_try},超时")
+@__retry_api
+def study_log(user: UserInfo, course: CourseInfo):
+    """/study/log
 
-    raise KnownException(f"学习失败,{errmsg}")
-
-
-def post_login(username: str, pwd: str, pub_key: str, code: str):
-    post_dict = {
-        'userName': encryptor.encrypt(username, pub_key),
-        'pwd': encryptor.encrypt(pwd, pub_key),
-        'validateCode': encryptor.encrypt(code, pub_key)
+    Args:
+        user (UserInfo): studying user
+        course (CourseInfo): course to study
+    """
+    body = {
+        "userId": user.id,
+        "id_number": user.id_number,
+        "name": user.name,
+        "openid": user.openid,
+        "platform": user.platform,
+        "course": course.id,
+        "course_name": course.season_episode,
+        "identify": 0,
+        "study_time": get_ts() - 60 * 1000 * 5,  # five minutes ago
     }
+    ts, sign = use_sign(body)
+    resp = sess.post(f"{base}/study/log", json=body, headers={
+        "Timestamp": ts,
+        "Sign": sign
+    })
+    check_resp(resp)
 
-    resp = sess.post(url="https://m.fjcyl.com/mobileNologin",
-                     data=post_dict, timeout=10)
 
-    if resp.status_code == requests.codes['ok']:
-        if resp.json().get('success'):
-            logging.info(username[-4:] + ' login ' + resp.json().get('errmsg'))
-        else:
-            raise ConnectionError(resp.json().get('errmsg'))
-    else:
-        raise KnownException(
-            f'官方服务器发生异常,错误代码:{resp.status_code},信息:{resp.text}')
+@__retry_api
+def get_last_course() -> CourseInfo:
+    """/course/get
+
+    Returns:
+        CourseInfo: last course infomation
+    """
+    param = {"platform": 3}
+    ts, sign = use_sign(param)
+    resp = sess.get(f"{base}/course/get", params=param, headers={
+        "Timestamp": ts,
+        "Sign": sign
+    })
+    return CourseInfo(dt=check_resp(resp))
+
+
+@__retry_api
+def get_user_info(id: int) -> UserInfo:
+    """/user/refresh
+
+    Args:
+        id (int): user_id
+
+    Returns:
+        UserInfo: user infomation
+    """
+    param = {"id": id}
+    ts, sign = use_sign(param)
+    resp = sess.post(f"{base}/user/refresh", json=param, headers={
+        "Timestamp": ts,
+        "Sign": sign
+    })
+    return UserInfo(dt=check_resp(resp))
+
+
+@__retry_api
+def refresh_token(refresh_token: str) -> TokenInfo:
+    """/user/refreshToken
+
+    Args:
+        refresh_token (str): refresh token
+
+    Returns:
+        TokenInfo: new token info
+    """
+    resp = sess.get(f"{base}/user/refreshToken?refreshToken={refresh_token}", headers={
+        "Timestamp": str(get_ts())
+    })
+    info = TokenInfo(dt=check_resp(resp))
+    sess.headers['Authorization'] = info.token
+    return info
+
+
+def check_resp(resp: requests.Response) -> dict:
+    res = resp.json()
+    if res['code'] != 1000:
+        raise KnownException(f"bad request to {resp.url}: {res['message']}")
+    return res['data']
