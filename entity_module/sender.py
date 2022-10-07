@@ -1,8 +1,8 @@
 class Sender(object):
     type: str
     key: str
-    mode: str
-    enabled: bool
+    mode: str = 'fail'
+    enabled: bool = False
     executor: any
 
     def __init__(self, dt: dict = {}) -> None:

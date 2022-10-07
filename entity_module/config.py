@@ -9,9 +9,9 @@ class Config(object):
     max_retry: int
     sender: Sender
     
-    __persist_func: function
+    __persist_func: callable
     
-    def __init__(self, dt: dict, save: function) -> None:
+    def __init__(self, dt: dict, save: callable) -> None:
         self.__persist_func = save
         self.__dict__.update(dt)
         

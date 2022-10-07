@@ -5,7 +5,7 @@ from exception import SendInitException
 from util import is_set
 
 
-sender: Sender
+sender = Sender()
 
 
 def enabled(enable: bool):
