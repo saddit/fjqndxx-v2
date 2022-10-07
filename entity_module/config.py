@@ -12,8 +12,11 @@ class Config(object):
     __persist_func: callable
     
     def __init__(self, dt: dict, save: callable) -> None:
-        self.__persist_func = save
         self.__dict__.update(dt)
+        self.__persist_func = save
+        self.token_info = TokenInfo(dt['token_info'])
+        self.user_info = UserInfo(dt['user_info'])
+        self.sender = Sender(dt['sender'])
         
     def persist(self):
         self.__persist_func(self)
