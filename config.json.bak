@@ -1,24 +1,13 @@
 {
-  "username": "引号内填入你的用户名",
-  "pwd": "填入密码",
-  "rsaKey": {
-    "public": "填入公钥"
-  },
-  "send": {
-    "type": "不填写则不开启",
-    "key": "填写server酱或其他的SendKey",
-    "mode": "默认fail(fail/success/both)"
-  },
-  "ocr": {
-    "sk": "填写API KEY",
-    "ak": "填写SECRET KEY",
-    "type": "baidu_image/tesseract/azure/pytesseract"
-  },
-  "extUsers": [
-    {
-      "username": "",
-      "pwd": ""
-    }
-  ],
-  "maxRetry": 5
+    "user_info": {
+        "unionid": "",
+        "mp_openid":""
+    },
+    "token_info": {},
+    "sender": {
+        "mode": "fail/success/both",
+        "key": "",
+        "type": "server_chan/bark/push_plus"
+    },
+    "max_retry": 5
 }

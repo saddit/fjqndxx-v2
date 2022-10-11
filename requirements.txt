@@ -1,5 +1,1 @@
 requests
-gmssl
-pycryptodome
-lxml
-regex
