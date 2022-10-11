@@ -96,7 +96,7 @@ def run(use_config: bool):
     # check token
     check_config(conf)
     # start study
-    start_study(conf)
+    # start_study(conf)
     # persist token and user info
     conf.persist()
 

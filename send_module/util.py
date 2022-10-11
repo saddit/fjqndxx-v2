@@ -26,7 +26,7 @@ def init_sender(sd: Sender):
             raise SendInitException("消息推送类型不存在，请更换类型")
 
         sender.enabled = True
-        sender.executor.set_key(sd.l)
+        sender.executor.set_key(sd.key)
         if not is_set(sender.mode):
             sender.mode = 'fail'
 

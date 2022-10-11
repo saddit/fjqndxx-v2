@@ -1,3 +1,5 @@
+import logging
+import re
 import requests
 
 send_sess = requests.session()
