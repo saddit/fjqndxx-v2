@@ -2,7 +2,7 @@ from importlib import import_module
 import logging
 from entity_module import Sender
 from exception import SendInitException
-from util import is_set
+from common_module.util import is_set
 
 
 sender = Sender()

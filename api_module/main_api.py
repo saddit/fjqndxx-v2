@@ -128,6 +128,23 @@ def refresh_token(refresh_token: str) -> TokenInfo:
     return info
 
 
+def login_by_mp(unionid: str, mp_openid: str) -> tuple[TokenInfo, UserInfo]:
+    body = {
+        "unionid": unionid,
+        "mp_openid": mp_openid
+    }
+    ts, sign = use_sign(body)
+    resp = sess.post(f"{base}/user/loginByMp", json=body, headers={
+        "Timestamp": ts,
+        "Sign": sign
+    })
+    dt = check_resp(resp)
+    usr_info = UserInfo(dt['userInfo'])
+    tk_info = TokenInfo(dt)
+    sess.headers['Authorization'] = tk_info.token
+    return tk_info, usr_info
+
+
 def check_resp(resp: requests.Response) -> dict:
     res = resp.json()
     if res['code'] != 1000:

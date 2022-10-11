@@ -12,11 +12,16 @@ class Config(object):
     __persist_func: callable
     
     def __init__(self, dt: dict, save: callable) -> None:
-        self.__dict__.update(dt)
         self.__persist_func = save
+        self.max_retry = dt['max_retry']
         self.token_info = TokenInfo(dt['token_info'])
         self.user_info = UserInfo(dt['user_info'])
         self.sender = Sender(dt['sender'])
         
     def persist(self):
-        self.__persist_func(self)
+        self.__persist_func({
+            'token_info': self.token_info.__dict__,
+            'user_info': self.user_info.__dict__,
+            'sender': self.sender.__dict__,
+            'max_retry': self.max_retry
+        })

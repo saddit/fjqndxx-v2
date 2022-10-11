@@ -2,7 +2,7 @@
 
 <!-- ![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) -->
 
-![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.7-green.svg)
+![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.9-green.svg)
 
 [此处展示最近更新日志，完整日志搓这里](./doc/Log.md)
 
@@ -24,19 +24,17 @@
 
 ## 运行和调试方法
 
-### 抓取Token
+### 抓取Openid
 
 1. 进入 '我的' > 微信登录
 2. 如果已经登陆需要清除缓存 '我的' > 清除缓存
 
-抓取请求 `/platform/checkuser`，记录以下信息到配置文件中
+抓取请求 `/fjqndxx/v1/app/big_study/user/loginByMp`，查看**请求体**中的内容,记录以下信息到配置文件中
 
 ```json
 {
-    "refreshExpire": 0,
-    "expire": 0,
-    "refreshToken": "",
-    "token": ""
+    "unionid": "",
+    "mp_openid":""
 }
 ```
 

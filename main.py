@@ -8,7 +8,7 @@ from api_module import main_api as api
 from entity_module import Config
 from exception import KnownException, SendInitException
 from send_module import util as sendutil
-from util import is_set
+from common_module.util import is_set
 
 THIS_PATH = os.path.dirname(__file__)
 
@@ -46,9 +46,10 @@ def get_profile_from_config() -> Config:
     with open(os.path.join(THIS_PATH, 'config.json'), 'r', encoding='utf-8') as config:
         dt = json.loads(config.read())
 
-    def save_file(c: Config):
+    def save_file(c: dict):
+        content = json.dumps(c, indent=2)
         with open(os.path.join(THIS_PATH, 'config.json'), 'w', encoding='utf-8') as file:
-            file.write(json.dumps(c.__dict__))
+            file.write(content)
 
     conf = Config(dt, save_file)
     return conf
@@ -58,28 +59,37 @@ def get_profile_from_env() -> Config:
     s = os.environ['tk_config']
     dt = json.loads(s)
     # todo: save env
-    return Config(dt, save = lambda c: c)
+    return Config(dt, save=lambda c: c)
 
 
 def start_study(conf: Config):
     course = api.get_last_course()
     api.study_log(conf.user_info, course)
-    logging.info("study %s success", course.season_episode)
+    logging.info("study %s 《%s》 success", course.season_episode, course.title)
 
 
-def check_config(conf: Config):
-    now = datetime.now()
-    tk_expire = datetime.fromtimestamp(conf.token_info.expire)
-    rf_expire = datetime.fromtimestamp(conf.token_info.refreshExpire)
-    if tk_expire <= now:
-        if rf_expire <= now:
-            raise KnownException("token and refreashToken has expired")
-        logging.info("token expired, refeash token")
-        conf.token_info = api.refresh_token(conf.token_info.refreshToken)
-        
-    if not is_set(conf.user_info.openid):
-        logging.info("not found user info, get user info")
-        conf.user_info = api.get_user_info(conf.user_info.id)
+# def check_config(conf: Config):
+#     now = datetime.now()
+#     tk_expire = datetime.fromtimestamp(conf.token_info.expire)
+#     rf_expire = datetime.fromtimestamp(conf.token_info.refresh_expire)
+#     if tk_expire <= now:
+#         if rf_expire <= now:
+#             raise KnownException("token and refreashToken has expired")
+#         logging.info("token expired, refeash token")
+#         conf.token_info = api.refresh_token(conf.token_info.refresh_token)
+
+#     if not is_set(conf.user_info.openid):
+#         logging.info("not found user info, get user info")
+#         conf.user_info = api.get_user_info(conf.user_info.id)
+
+
+def login(conf: Config):
+    if conf.token_info.get_expired_at() <= datetime.now():
+        logging.info("token expired, login to refresh token")
+        conf.token_info, conf.user_info = api.login_by_mp(
+            conf.user_info.unionid, conf.user_info.mp_openid)
+        # persist token and user info
+        conf.persist()
 
 
 @catch_exception
@@ -89,16 +99,14 @@ def run(use_config: bool):
     conf = get_profile_from_config() if use_config else get_profile_from_env()
     if not is_set(conf):
         raise KnownException("找不到配置文件")
+    # login
+    login(conf)
     # init api
     api.initalize(conf.token_info.token, conf.max_retry)
-     # init sender
+    # init sender
     sendutil.init_sender(conf.sender)
-    # check token
-    check_config(conf)
     # start study
-    # start_study(conf)
-    # persist token and user info
-    conf.persist()
+    start_study(conf)
 
 
 def start_with_workflow():

@@ -1,17 +1,13 @@
 {
-  "user_info": {
-    "id": 0
-  },
-  "token_info": {
-    "refreshToken": "",
-    "token": "",
-    "expire": 0,
-    "refreshExpire": 0
-  },
-  "sender":{
-    "mode": "fail/success/both",
-    "key": "",
-    "type": "server_chan/bark/push_plus"
-  },
-  "max_retry": 5
+    "user_info": {
+        "unionid": "",
+        "mp_openid":""
+    },
+    "token_info": {},
+    "sender": {
+        "mode": "fail/success/both",
+        "key": "",
+        "type": "server_chan/bark/push_plus"
+    },
+    "max_retry": 5
 }
