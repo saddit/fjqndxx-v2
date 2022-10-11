@@ -1,5 +1,7 @@
 from functools import wraps
 import logging
+import random
+from time import sleep
 import requests
 import urllib3
 from api_module.sign import get_ts, use_sign
@@ -35,6 +37,7 @@ def __retry_api(func):
             except KnownException as e:
                 logging.error("api-err: %s, retry %d", e, cnt)
                 cnt += 1
+                sleep(0.5)
         if cnt == max_retry:
             raise KnownException("exceeded max retries")
     return retry
@@ -65,7 +68,7 @@ def study_log(user: UserInfo, course: CourseInfo):
         "course": course.id,
         "course_name": course.season_episode,
         "identify": 0,
-        "study_time": get_ts() - 60 * 1000 * 5,  # five minutes ago
+        "study_time": get_ts() - 60 * 1000 * random.randint(2, 5),  # rand(2~5) minutes ago
     }
     ts, sign = use_sign(body)
     resp = sess.post(f"{base}/study/log", json=body, headers={
