@@ -24,7 +24,7 @@ def catch_exception(func):
         except KnownException as ke:
             error_exit(f'{ke}', False)
         except BaseException as e:
-            error_exit(f"请阅读异常提醒，如果无法解决请截图日志发issue)：{e}")
+            error_exit(f"请阅读异常提醒, 如果无法解决请截图日志发issue): {e}")
     return catch
 
 
@@ -65,31 +65,17 @@ def get_profile_from_env() -> Config:
 def start_study(conf: Config):
     course = api.get_last_course()
     api.study_log(conf.user_info, course)
-    logging.info("study %s 《%s》 success", course.season_episode, course.title)
-
-
-# def check_config(conf: Config):
-#     now = datetime.now()
-#     tk_expire = datetime.fromtimestamp(conf.token_info.expire)
-#     rf_expire = datetime.fromtimestamp(conf.token_info.refresh_expire)
-#     if tk_expire <= now:
-#         if rf_expire <= now:
-#             raise KnownException("token and refreashToken has expired")
-#         logging.info("token expired, refeash token")
-#         conf.token_info = api.refresh_token(conf.token_info.refresh_token)
-
-#     if not is_set(conf.user_info.openid):
-#         logging.info("not found user info, get user info")
-#         conf.user_info = api.get_user_info(conf.user_info.id)
+    logging.info("成功学习 (id=%s, %s) 《%s》", course.id, course.season_episode, course.title)
 
 
 def login(conf: Config):
     if conf.token_info.get_expired_at() <= datetime.now():
-        logging.info("token expired, login to refresh token")
+        logging.info("检测到token过期, 正在尝试重新登录")
         conf.token_info, conf.user_info = api.login_by_mp(
             conf.user_info.unionid, conf.user_info.mp_openid)
         # persist token and user info
         conf.persist()
+        logging.info("token刷新并保存成功")
 
 
 @catch_exception
@@ -99,7 +85,7 @@ def run(use_config: bool):
     conf = get_profile_from_config() if use_config else get_profile_from_env()
     if not is_set(conf):
         raise KnownException("找不到配置文件")
-    # login
+    # login and update user_info
     login(conf)
     # init api
     api.initalize(conf.token_info.token, conf.max_retry)
@@ -107,6 +93,8 @@ def run(use_config: bool):
     sendutil.init_sender(conf.sender)
     # start study
     start_study(conf)
+    # send successful message
+    sendutil.send_msg("学习最新课程成功")
 
 
 def start_local():

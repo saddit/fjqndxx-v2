@@ -12,7 +12,7 @@ class UserInfo(object):
 
     def __init__(self, dt: dict = {}) -> None:
         self.id = dt.get('id', 0)
-        self.name = str(dt.get('name', ''))
+        self.name = dt.get('name', '')
         self.id_number = dt.get('id_number', '')
         self.platform = dt.get('platform', 3)
         self.openid = dt.get('openid', '')

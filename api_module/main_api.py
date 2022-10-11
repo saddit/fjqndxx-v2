@@ -152,4 +152,4 @@ def check_resp(resp: requests.Response) -> dict:
     res = resp.json()
     if res['code'] != 1000:
         raise KnownException(f"bad request to {resp.url}: {res['message']}")
-    return res['data']
+    return res.get('data', {})
