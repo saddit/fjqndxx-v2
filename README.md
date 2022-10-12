@@ -1,4 +1,4 @@
-# 青年大学习/团课自动打卡 [新系统]
+# [会被检测到 不建议使用] 青年大学习/团课自动打卡 
 
 <!-- ![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) -->
 
