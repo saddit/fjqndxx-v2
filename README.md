@@ -4,6 +4,8 @@
 
 ![](https://img.shields.io/github/stars/838239178/tk-auto-study) ![](https://img.shields.io/github/forks/838239178/tk-auto-study) ![](https://img.shields.io/badge/Python-3.9-green.svg)
 
+**[有空请参与这份调查](https://github.com/838239178/fjqndxx-v2/issues/116)**
+
 [此处展示最近更新日志，完整日志搓这里](./doc/Log.md)
 
 > 2022.10.01: 2.0版本 应用于新系统
