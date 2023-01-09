@@ -55,8 +55,8 @@
 克隆项目并更改配置文件名称
 
 ```shell
-git clone https://github.com/838239178/tk-auto-study.git && \
-cd tk-auto-study && \
+git clone https://github.com/838239178/fjqndxx-v2.git && \
+cd fjqndxx-v2 && \
 mv config.json.bak config.json
 ```
 
@@ -71,9 +71,9 @@ vi config.json
 ```shell
 crontab -e
 # 将下面这行复制到里面，cd的路径按照需要更改
-00 08 * * 3 cd /root/tk-auto-study && python3 main.py >> crontab.log 2>&1
+00 08 * * 3 cd /root/fjqndxx-v2 && python3 main.py >> crontab.log 2>&1
 # 或者
-00 08 * * 3 python3 /root/tk-auto-study/main.py >> crontab.log 2>&1
+00 08 * * 3 python3 /root/fjqndxx-v2/main.py >> crontab.log 2>&1
 ```
 
 使用 `crontab -l` 查看是否修改成功
