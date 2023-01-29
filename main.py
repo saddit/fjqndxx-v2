@@ -62,10 +62,10 @@ def get_profile_from_env() -> Config:
     return Config(dt, save=lambda c: c)
 
 
-def start_study(conf: Config):
+def start_study(conf: Config) -> str:
     course = api.get_last_course()
     api.study_log(conf.user_info, course)
-    logging.info("成功学习 (id=%s, %s) 《%s》", course.id, course.season_episode, course.title)
+    return f"成功学习 (id=%s, %s) 《%s》", course.id, course.season_episode, course.title
 
 
 def login(conf: Config):
@@ -92,9 +92,10 @@ def run(use_config: bool):
     # init sender
     sendutil.init_sender(conf.sender)
     # start study
-    start_study(conf)
+    msg = start_study(conf)
+    logging.info(msg)
     # send successful message
-    sendutil.send_msg("学习最新课程成功")
+    sendutil.send_msg(msg)
 
 
 def start_local():
