@@ -108,8 +108,3 @@ crontab -e
 
 [<img src="https://github.com/mamoe/mirai/raw/dev/.github/jetbrains-variant-3.png" width="200"/>](https://www.jetbrains.com/?from=mirai)
 
-
-## 赏我一杯Coffee
-
-![qq_pic_merged_1633171137809](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/qq_pic_merged_1633171137809.jpg)
-
