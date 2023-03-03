@@ -1,3 +1,5 @@
+> 2023.03.03 系统最近一次安全性更新对数据进行了加密，并更改了签名算法，目前该脚本已经无法使用
+
 # 青年大学习/团课自动打卡 
 
 <!-- ![](https://github.com/838239178/tk-auto-study/workflows/auto-study/badge.svg) -->
